@@ -2,6 +2,7 @@
 
 import { STEPS } from '@/utils/constants';
 import { useScrollRevealChildren } from '@/hooks/useScrollReveal';
+import OrderCurveSimulator from '@/components/ui/OrderCurveSimulator';
 
 export default function HowItWorksSection() {
   const containerRef = useScrollRevealChildren<HTMLDivElement>({ threshold: 0.1 });
@@ -50,6 +51,23 @@ export default function HowItWorksSection() {
               </p>
             </div>
           ))}
+        </div>
+
+        {/* Live Interactive Protocol Curve Simulator */}
+        <div className="mt-16 max-w-2xl mx-auto border border-neutral-100 bg-white rounded-3xl p-6 shadow-sm">
+          <h3 className="text-sm font-bold text-black uppercase tracking-wider mb-2">Live Curve Matching Simulator</h3>
+          <p className="text-xs text-neutral-500 mb-4">
+            Test how linear price decay brings buy orders (decreasing price) and sell orders (increasing price) into alignment for autonomous keeper settlement.
+          </p>
+          <OrderCurveSimulator
+            orderType="Buy"
+            startPrice={3000}
+            slope={-0.3}
+            minPrice={2800}
+            maxPrice={3200}
+            timeRangeMinutes={15}
+            showCounterOrder={true}
+          />
         </div>
       </div>
     </section>

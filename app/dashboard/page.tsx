@@ -5,6 +5,7 @@ import { useWallet } from '@/context/WalletContext';
 import { useContract } from '@/hooks/useContract';
 import { SUPPORTED_TOKENS, getTokenAddress } from '@/lib/contractConfig';
 import WalletModal from '@/components/wallet/WalletModal';
+import OrderCurveSimulator from '@/components/ui/OrderCurveSimulator';
 import { Zap, X } from 'lucide-react';
 
 interface Order {
@@ -73,7 +74,6 @@ export default function DashboardPage() {
 
   // ── Form State ────────────────────────────────────────────────────
   const [orderType, setOrderType] = useState<'Buy' | 'Sell'>('Buy');
-  const nextIdRef = useRef(3000);
   const [tokenIn, setTokenIn] = useState('WETH');
   const [tokenOut, setTokenOut] = useState('USDC');
   const [amount, setAmount] = useState<number>(1);
@@ -775,6 +775,15 @@ export default function DashboardPage() {
                   className="border border-neutral-200 bg-white p-2.5 rounded-xl text-black font-normal"
                 />
               </div>
+
+              {/* Live Interactive Curve Simulator */}
+              <OrderCurveSimulator
+                orderType={orderType}
+                startPrice={startPrice}
+                slope={slope}
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+              />
 
               <button
                 type="submit"
