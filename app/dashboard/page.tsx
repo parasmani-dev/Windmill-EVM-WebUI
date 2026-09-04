@@ -776,13 +776,14 @@ export default function DashboardPage() {
                 />
               </div>
 
-              {/* Live Interactive Curve Simulator */}
+              {/* Live Interactive Curve Visualizer with Real Contract State */}
               <OrderCurveSimulator
                 orderType={orderType}
                 startPrice={startPrice}
                 slope={slope}
                 minPrice={minPrice}
                 maxPrice={maxPrice}
+                counterOrders={orders.filter((o) => o.active)}
               />
 
               <button

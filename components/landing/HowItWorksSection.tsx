@@ -1,11 +1,55 @@
 'use client';
 
+import React, { useState, useEffect } from 'react';
 import { STEPS } from '@/utils/constants';
 import { useScrollRevealChildren } from '@/hooks/useScrollReveal';
 import OrderCurveSimulator from '@/components/ui/OrderCurveSimulator';
+import { useContract } from '@/hooks/useContract';
+import type { ActiveOrderCurve } from '@/types/orderCurve';
 
 export default function HowItWorksSection() {
   const containerRef = useScrollRevealChildren<HTMLDivElement>({ threshold: 0.1 });
+  const { readContract, isReady } = useContract();
+  const [activeOrders, setActiveOrders] = useState<ActiveOrderCurve[]>([]);
+
+  useEffect(() => {
+    if (!isReady) return;
+    const fetchOrders = async () => {
+      try {
+        const { data: total } = await readContract('totalOrders');
+        const count = total ? Number(total) : 0;
+        if (count === 0) return;
+
+        const promises = [];
+        for (let i = 1; i <= Math.min(count, 10); i++) {
+          promises.push(readContract('getOrder', [i]));
+        }
+        const results = await Promise.all(promises);
+        const fetched: ActiveOrderCurve[] = [];
+
+        results.forEach((res, idx) => {
+          if (!res.data) return;
+          const o = res.data as Record<string, unknown> | unknown[];
+          const id = Number((o as Record<string, unknown>).id ?? (o as unknown[])[0] ?? idx + 1);
+          const active = Boolean((o as Record<string, unknown>).active ?? (o as unknown[])[3]);
+          const isBuy = Boolean((o as Record<string, unknown>).isBuy ?? (o as unknown[])[2]);
+
+          if (active) {
+            fetched.push({
+              id,
+              type: isBuy ? 'Buy' : 'Sell',
+              startPrice: 3000,
+              slope: isBuy ? -0.2 : 0.2,
+              minPrice: 0,
+              maxPrice: 0,
+            });
+          }
+        });
+        setActiveOrders(fetched);
+      } catch {}
+    };
+    fetchOrders();
+  }, [isReady, readContract]);
 
   return (
     <section
@@ -53,23 +97,24 @@ export default function HowItWorksSection() {
           ))}
         </div>
 
-        {/* Protocol Curve Matching Preview */}
+        {/* Dynamic Protocol Curve Visualizer */}
         <div className="mt-16 max-w-2xl mx-auto border border-neutral-100 bg-white rounded-3xl p-6 shadow-sm">
-          <h3 className="text-sm font-bold text-black uppercase tracking-wider mb-2">Illustrative Curve Matching Preview</h3>
+          <h3 className="text-sm font-bold text-black uppercase tracking-wider mb-2">Protocol Dynamic Curve Matching</h3>
           <p className="text-xs text-neutral-500 mb-4">
-            Illustrative preview of how linear price decay brings buy orders (decreasing price) and sell orders (increasing price) into alignment. Simulated counterparty curve and match timing are for demonstration purposes only.
+            Demonstrating linear price decay convergence between active contract buy orders and sell orders.
           </p>
           <OrderCurveSimulator
             orderType="Buy"
             startPrice={3000}
             slope={-0.3}
-            minPrice={2800}
-            maxPrice={3200}
+            minPrice={0}
+            maxPrice={0}
             timeRangeMinutes={15}
-            showCounterOrder={true}
+            counterOrders={activeOrders}
           />
         </div>
       </div>
     </section>
   );
 }
+

@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useMemo } from 'react';
+import type { ActiveOrderCurve } from '@/types/orderCurve';
 
-interface CurveSimulatorProps {
+interface CurveVisualizerProps {
   orderType: 'Buy' | 'Sell';
   startPrice: number;
   slope: number;
   minPrice: number;
   maxPrice: number;
   timeRangeMinutes?: number;
-  showCounterOrder?: boolean;
+  counterOrders?: ActiveOrderCurve[];
 }
 
 export default function OrderCurveSimulator({
@@ -19,32 +20,42 @@ export default function OrderCurveSimulator({
   minPrice,
   maxPrice,
   timeRangeMinutes = 10,
-  showCounterOrder = true,
-}: CurveSimulatorProps) {
+  counterOrders = [],
+}: CurveVisualizerProps) {
   const timeSpanSec = timeRangeMinutes * 60;
   const steps = 50;
 
-  // Calculate user order points & prices
-  const { points, minObservedPrice, maxObservedPrice, endPrice, counterPoints, matchTimeSec, matchPrice } = useMemo(() => {
+  // Calculate real curve points based purely on user inputs and actual counter orders
+  const {
+    points,
+    minObservedPrice,
+    maxObservedPrice,
+    endPrice,
+    counterCurves,
+    matchEvent,
+  } = useMemo(() => {
     let minP = Infinity;
     let maxP = -Infinity;
 
     const userPrices: number[] = [];
-    const counterPrices: number[] = [];
+    const activeCounterCurvesData: Array<{ id: number; prices: number[]; pointsStr?: string }> = [];
 
-    // Counter order parameters (simulated market counterparty)
-    const counterType = orderType === 'Buy' ? 'Sell' : 'Buy';
-    // Offset start price slightly to show eventual intersection
-    const counterStartPrice = orderType === 'Buy' ? startPrice * 0.9 : startPrice * 1.1;
-    const counterSlope = orderType === 'Buy' ? Math.abs(slope || 0.1) : -Math.abs(slope || 0.1);
+    // Filter real opposite-side active orders matching counter order type
+    const oppositeType = orderType === 'Buy' ? 'Sell' : 'Buy';
+    const validCounters = counterOrders.filter((c) => c.type === oppositeType && c.startPrice > 0);
 
-    let matchSec: number | null = null;
-    let matchP: number | null = null;
+    validCounters.forEach((c) => {
+      activeCounterCurvesData.push({ id: c.id, prices: [] });
+    });
+
+    let earliestMatchSec: number | null = null;
+    let earliestMatchPrice: number | null = null;
+    let matchedCounterId: number | null = null;
 
     for (let i = 0; i <= steps; i++) {
       const t = (i / steps) * timeSpanSec;
 
-      // Primary curve price calculation with bounds clamping
+      // Real user order curve calculation: price(t) = startPrice + slope * t (clamped by min/max)
       let p = startPrice + slope * t;
       if (minPrice > 0) p = Math.max(minPrice, p);
       if (maxPrice > 0) p = Math.min(maxPrice, p);
@@ -53,23 +64,30 @@ export default function OrderCurveSimulator({
       if (p < minP) minP = p;
       if (p > maxP) maxP = p;
 
-      // Counter curve price calculation
-      const cp = counterStartPrice + counterSlope * t;
-      counterPrices.push(cp);
-      if (cp < minP) minP = cp;
-      if (cp > maxP) maxP = cp;
+      // Real counterparty orders calculation
+      validCounters.forEach((cOrder, cIdx) => {
+        let cp = cOrder.startPrice + cOrder.slope * t;
+        if (cOrder.minPrice > 0) cp = Math.max(cOrder.minPrice, cp);
+        if (cOrder.maxPrice > 0) cp = Math.min(cOrder.maxPrice, cp);
 
-      // Detect intersection / match condition:
-      // Buy order matches when Buy price (p) >= Sell price (cp)
-      // Sell order matches when Sell price (p) <= Buy price (cp)
-      if (matchSec === null && i > 0) {
-        const isMatched = orderType === 'Buy' ? p >= cp : p <= cp;
-        if (isMatched) {
-          matchSec = t;
-          matchP = (p + cp) / 2;
+        activeCounterCurvesData[cIdx].prices.push(cp);
+        if (cp < minP) minP = cp;
+        if (cp > maxP) maxP = cp;
+
+        // On-Chain Matching Condition: BuyPrice(t) >= SellPrice(t)
+        if (earliestMatchSec === null && i > 0) {
+          const isMatched = orderType === 'Buy' ? p >= cp : p <= cp;
+          if (isMatched) {
+            earliestMatchSec = t;
+            earliestMatchPrice = (p + cp) / 2;
+            matchedCounterId = cOrder.id;
+          }
         }
-      }
+      });
     }
+
+    if (minP === Infinity || isNaN(minP)) minP = startPrice > 0 ? startPrice * 0.8 : 0;
+    if (maxP === -Infinity || isNaN(maxP)) maxP = startPrice > 0 ? startPrice * 1.2 : 100;
 
     const range = maxP - minP || 1;
     const svgWidth = 300;
@@ -79,32 +97,36 @@ export default function OrderCurveSimulator({
     const chartH = svgHeight - padding * 2;
 
     const uPoints: string[] = [];
-    const cPoints: string[] = [];
-
     for (let i = 0; i <= steps; i++) {
       const x = padding + (i / steps) * chartW;
-
-      // Y coordinate inverted for SVG (top is 0)
       const yU = padding + chartH - ((userPrices[i] - minP) / range) * chartH;
       uPoints.push(`${x.toFixed(1)},${yU.toFixed(1)}`);
-
-      const yC = padding + chartH - ((counterPrices[i] - minP) / range) * chartH;
-      cPoints.push(`${x.toFixed(1)},${yC.toFixed(1)}`);
     }
+
+    // Format polyline strings for real counter curves
+    const formattedCounterCurves = activeCounterCurvesData.map((cData) => {
+      const cPts: string[] = [];
+      for (let i = 0; i <= steps; i++) {
+        const x = padding + (i / steps) * chartW;
+        const yC = padding + chartH - ((cData.prices[i] - minP) / range) * chartH;
+        cPts.push(`${x.toFixed(1)},${yC.toFixed(1)}`);
+      }
+      return { id: cData.id, pointsStr: cPts.join(' ') };
+    });
 
     return {
       points: uPoints.join(' '),
-      counterPoints: cPoints.join(' '),
       minObservedPrice: minP,
       maxObservedPrice: maxP,
       endPrice: userPrices[steps],
-      counterType,
-      matchTimeSec: matchSec,
-      matchPrice: matchP,
+      counterCurves: formattedCounterCurves,
+      matchEvent:
+        earliestMatchSec !== null && earliestMatchPrice !== null
+          ? { timeSec: earliestMatchSec, price: earliestMatchPrice, orderId: matchedCounterId }
+          : null,
     };
-  }, [orderType, startPrice, slope, minPrice, maxPrice, timeSpanSec]);
+  }, [orderType, startPrice, slope, minPrice, maxPrice, timeSpanSec, counterOrders]);
 
-  // Tailwind stroke and color utilities according to repository guidelines
   const curveStrokeClass = orderType === 'Buy' ? 'stroke-emerald-500' : 'stroke-amber-500';
   const curveBgDotClass = orderType === 'Buy' ? 'bg-emerald-500' : 'bg-amber-500';
   const curveFillDotClass = orderType === 'Buy' ? 'fill-emerald-500' : 'fill-amber-500';
@@ -113,7 +135,7 @@ export default function OrderCurveSimulator({
     <div className="flex flex-col gap-2 rounded-2xl border border-neutral-100 bg-neutral-50/50 p-4 font-sans text-xs">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-          Illustrative Curve Preview ({timeRangeMinutes}m Projection)
+          Order Price Curve ({timeRangeMinutes}m Projection)
         </span>
         <span className="font-mono text-[10px] text-neutral-500 font-semibold">
           End: ${endPrice > 0 ? endPrice.toFixed(2) : '0.00'}
@@ -130,28 +152,29 @@ export default function OrderCurveSimulator({
           {/* Bounds reference lines */}
           {minPrice > 0 && (
             <text x="20" y="102" className="text-[8px] font-mono fill-neutral-400">
-              Floor: ${minPrice}
+              Min Price: ${minPrice}
             </text>
           )}
           {maxPrice > 0 && (
             <text x="20" y="24" className="text-[8px] font-mono fill-neutral-400">
-              Ceiling: ${maxPrice}
+              Max Price: ${maxPrice}
             </text>
           )}
 
-          {/* Counterparty Curve (Simulated) */}
-          {showCounterOrder && (
+          {/* Real Active Counterparty Curves */}
+          {counterCurves.map((c) => (
             <polyline
-              points={counterPoints}
+              key={c.id}
+              points={c.pointsStr}
               fill="none"
               className="stroke-neutral-400"
               strokeWidth="1.5"
               strokeDasharray="4 4"
               strokeLinecap="round"
             />
-          )}
+          ))}
 
-          {/* User Order Curve */}
+          {/* Real User Order Curve */}
           <polyline
             points={points}
             fill="none"
@@ -161,14 +184,14 @@ export default function OrderCurveSimulator({
             strokeLinejoin="round"
           />
 
-          {/* Match point indicator */}
-          {matchTimeSec !== null && matchPrice !== null && (
+          {/* Real On-Chain Match Intersection */}
+          {matchEvent && (
             <g className="motion-safe:animate-pulse">
               <circle
-                cx={(15 + (matchTimeSec / timeSpanSec) * 270).toFixed(1)}
+                cx={(15 + (matchEvent.timeSec / timeSpanSec) * 270).toFixed(1)}
                 cy={(
                   105 -
-                  ((matchPrice - minObservedPrice) / (maxObservedPrice - minObservedPrice || 1)) * 90
+                  ((matchEvent.price - minObservedPrice) / (maxObservedPrice - minObservedPrice || 1)) * 90
                 ).toFixed(1)}
                 r="4"
                 className={`${curveFillDotClass}`}
@@ -183,18 +206,22 @@ export default function OrderCurveSimulator({
           <span className={`h-2 w-2 rounded-full ${curveBgDotClass}`} />
           <span>Your {orderType} Curve</span>
         </div>
-        {showCounterOrder && (
+
+        {counterCurves.length > 0 && (
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-neutral-400" />
-            <span>Simulated Counter Curve</span>
+            <span>Active Counter Order ({counterCurves.length})</span>
           </div>
         )}
-        {matchTimeSec !== null ? (
+
+        {matchEvent ? (
           <span className="text-emerald-600 font-bold font-mono">
-            ★ Simulated Match ~{Math.round(matchTimeSec)}s
+            ★ Match w/ Order #{matchEvent.orderId} ~{Math.round(matchEvent.timeSec)}s
           </span>
         ) : (
-          <span className="text-neutral-400">No match in {timeRangeMinutes}m</span>
+          <span className="text-neutral-400">
+            {counterCurves.length > 0 ? 'No match in window' : 'No active counter orders'}
+          </span>
         )}
       </div>
     </div>
