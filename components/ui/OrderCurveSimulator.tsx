@@ -59,9 +59,11 @@ export default function OrderCurveSimulator({
       if (cp < minP) minP = cp;
       if (cp > maxP) maxP = cp;
 
-      // Detect intersection / match condition (BuyPrice >= SellPrice)
+      // Detect intersection / match condition:
+      // Buy order matches when Buy price (p) >= Sell price (cp)
+      // Sell order matches when Sell price (p) <= Buy price (cp)
       if (matchSec === null && i > 0) {
-        const isMatched = orderType === 'Buy' ? p <= cp : p >= cp;
+        const isMatched = orderType === 'Buy' ? p >= cp : p <= cp;
         if (isMatched) {
           matchSec = t;
           matchP = (p + cp) / 2;
@@ -102,14 +104,16 @@ export default function OrderCurveSimulator({
     };
   }, [orderType, startPrice, slope, minPrice, maxPrice, timeSpanSec]);
 
-  const mainColor = orderType === 'Buy' ? '#10B981' : '#F59E0B'; // Emerald for Buy, Amber for Sell
-  const counterColor = orderType === 'Buy' ? '#9CA3AF' : '#9CA3AF'; // Muted neutral for counter curve
+  // Tailwind stroke and color utilities according to repository guidelines
+  const curveStrokeClass = orderType === 'Buy' ? 'stroke-emerald-500' : 'stroke-amber-500';
+  const curveBgDotClass = orderType === 'Buy' ? 'bg-emerald-500' : 'bg-amber-500';
+  const curveFillDotClass = orderType === 'Buy' ? 'fill-emerald-500' : 'fill-amber-500';
 
   return (
     <div className="flex flex-col gap-2 rounded-2xl border border-neutral-100 bg-neutral-50/50 p-4 font-sans text-xs">
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-bold uppercase tracking-wider text-neutral-400">
-          Dynamic Curve Preview ({timeRangeMinutes}m Projection)
+          Illustrative Curve Preview ({timeRangeMinutes}m Projection)
         </span>
         <span className="font-mono text-[10px] text-neutral-500 font-semibold">
           End: ${endPrice > 0 ? endPrice.toFixed(2) : '0.00'}
@@ -140,7 +144,7 @@ export default function OrderCurveSimulator({
             <polyline
               points={counterPoints}
               fill="none"
-              stroke={counterColor}
+              className="stroke-neutral-400"
               strokeWidth="1.5"
               strokeDasharray="4 4"
               strokeLinecap="round"
@@ -151,7 +155,7 @@ export default function OrderCurveSimulator({
           <polyline
             points={points}
             fill="none"
-            stroke={mainColor}
+            className={`${curveStrokeClass}`}
             strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -159,7 +163,7 @@ export default function OrderCurveSimulator({
 
           {/* Match point indicator */}
           {matchTimeSec !== null && matchPrice !== null && (
-            <g className="animate-pulse">
+            <g className="motion-safe:animate-pulse">
               <circle
                 cx={(15 + (matchTimeSec / timeSpanSec) * 270).toFixed(1)}
                 cy={(
@@ -167,7 +171,7 @@ export default function OrderCurveSimulator({
                   ((matchPrice - minObservedPrice) / (maxObservedPrice - minObservedPrice || 1)) * 90
                 ).toFixed(1)}
                 r="4"
-                fill={mainColor}
+                className={`${curveFillDotClass}`}
               />
             </g>
           )}
@@ -176,18 +180,18 @@ export default function OrderCurveSimulator({
 
       <div className="flex items-center justify-between text-[10px] text-neutral-500 font-medium">
         <div className="flex items-center gap-1.5">
-          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: mainColor }} />
+          <span className={`h-2 w-2 rounded-full ${curveBgDotClass}`} />
           <span>Your {orderType} Curve</span>
         </div>
         {showCounterOrder && (
           <div className="flex items-center gap-1.5">
             <span className="h-2 w-2 rounded-full bg-neutral-400" />
-            <span>Counter Curve</span>
+            <span>Simulated Counter Curve</span>
           </div>
         )}
         {matchTimeSec !== null ? (
           <span className="text-emerald-600 font-bold font-mono">
-            ★ Keeper Match ~{Math.round(matchTimeSec)}s
+            ★ Simulated Match ~{Math.round(matchTimeSec)}s
           </span>
         ) : (
           <span className="text-neutral-400">No match in {timeRangeMinutes}m</span>
