@@ -33,13 +33,15 @@ function getSvgY(p: number): number {
 
 export default function InteractiveCurveSimulator() {
   // ── Simulator Parameters ───────────────────────────────────────────
-  // Default: Buy order starts high ($3,300) with negative slope (-0.8/s)
-  // Sell order starts low ($2,700) with positive slope (+0.6/s)
-  // They naturally converge towards a midpoint settlement
-  const [buyStart, setBuyStart] = useState(3300);
-  const [buySlope, setBuySlope] = useState(-0.8);
-  const [sellStart, setSellStart] = useState(2700);
-  const [sellSlope, setSellSlope] = useState(0.6);
+  // Protocol Rule: An order match occurs when BuyPrice(t) >= SellPrice(t)
+  // Educational Price Discovery Sequence:
+  // Buyer starts lower ($2,700) with positive slope (+0.8/s, bidding higher over time)
+  // Seller starts higher ($3,300) with negative slope (-0.6/s, lowering ask over time)
+  // They start apart with a spread, converge, and match when curves meet (Buy >= Sell)
+  const [buyStart, setBuyStart] = useState(2700);
+  const [buySlope, setBuySlope] = useState(0.8);
+  const [sellStart, setSellStart] = useState(3300);
+  const [sellSlope, setSellSlope] = useState(-0.6);
 
   const [time, setTime] = useState(0); // 0 to 600 seconds
   const [isPlaying, setIsPlaying] = useState(true);
@@ -53,10 +55,10 @@ export default function InteractiveCurveSimulator() {
 
   // Exact crossing time computation: P_buy(t) = P_sell(t)
   // buyStart + buySlope * t = sellStart + sellSlope * t
-  // t = (buyStart - sellStart) / (sellSlope - buySlope)
+  // t = (sellStart - buyStart) / (buySlope - sellSlope)
   const crossingTime = useMemo(() => {
-    const priceDiff = buyStart - sellStart;
-    const slopeDiff = sellSlope - buySlope;
+    const priceDiff = sellStart - buyStart;
+    const slopeDiff = buySlope - sellSlope;
     if (Math.abs(slopeDiff) < 0.0001) return null;
     const t = priceDiff / slopeDiff;
     return t > 0 && t <= maxTime ? Math.round(t * 100) / 100 : null;
@@ -99,21 +101,13 @@ export default function InteractiveCurveSimulator() {
   const currentBuyPrice = Math.max(100, Math.round((buyStart + buySlope * time) * 100) / 100);
   const currentSellPrice = Math.max(100, Math.round((sellStart + sellSlope * time) * 100) / 100);
 
-  // Match Condition:
-  // In this converging double auction (Buy decreases, Sell increases),
-  // they start apart (spread > 0, price discovery in progress).
-  // When time reaches the intersection (time >= crossingTime),
-  // the match condition is satisfied and keepers execute!
-  const isMatchable = useMemo(() => {
-    if (crossingTime === null) {
-      return false;
-    }
-    return time >= crossingTime;
-  }, [time, crossingTime]);
+  // Protocol Match Condition: BuyPrice(t) >= SellPrice(t)
+  // When buyer's bid meets or exceeds seller's asking price, keepers can match.
+  const isMatchable = currentBuyPrice >= currentSellPrice;
 
   const settlementPrice = crossingPrice ?? Math.round(((currentBuyPrice + currentSellPrice) / 2) * 100) / 100;
   const keeperFee = Math.round((settlementPrice * 0.001) * 1000) / 1000;
-  const currentSpread = Math.abs(Math.round((currentBuyPrice - currentSellPrice) * 100) / 100);
+  const currentSpread = Math.max(0, Math.round((currentSellPrice - currentBuyPrice) * 100) / 100);
 
   // Generate SVG paths with smooth resolution
   const buyPath = useMemo(() => {
@@ -138,25 +132,24 @@ export default function InteractiveCurveSimulator() {
     return `M ${points.join(' L ')}`;
   }, [sellStart, sellSlope]);
 
-
   // Preset scenarios
   const applyPreset = (preset: 'default' | 'fast' | 'volatile') => {
     setTime(0);
     if (preset === 'default') {
-      setBuyStart(3300);
-      setBuySlope(-0.8);
-      setSellStart(2700);
-      setSellSlope(0.6);
+      setBuyStart(2700);
+      setBuySlope(0.8);
+      setSellStart(3300);
+      setSellSlope(-0.6);
     } else if (preset === 'fast') {
-      setBuyStart(3200);
-      setBuySlope(-1.5);
-      setSellStart(2800);
-      setSellSlope(1.2);
+      setBuyStart(2800);
+      setBuySlope(1.5);
+      setSellStart(3200);
+      setSellSlope(-1.2);
     } else if (preset === 'volatile') {
-      setBuyStart(3500);
-      setBuySlope(-1.8);
-      setSellStart(2500);
-      setSellSlope(0.8);
+      setBuyStart(2500);
+      setBuySlope(0.8);
+      setSellStart(3500);
+      setSellSlope(-1.8);
     }
     setIsPlaying(true);
   };
@@ -180,16 +173,19 @@ export default function InteractiveCurveSimulator() {
             <code className="px-1.5 py-0.5 rounded bg-neutral-100 font-mono text-[11px] text-neutral-800">
               P(t) = P₀ + s · t
             </code>{' '}
-            defined in <span className="font-semibold text-neutral-700">PriceCurve.sol</span>.
+            defined in <span className="font-semibold text-neutral-700">PriceCurve.sol</span>. Matches when{' '}
+            <code className="px-1.5 py-0.5 rounded bg-neutral-100 font-mono text-[11px] text-neutral-800">
+              BuyPrice(t) ≥ SellPrice(t)
+            </code>.
           </p>
         </div>
 
         {/* Convergence / Match Status Pill */}
         <div className="flex items-center gap-2 shrink-0">
           {isMatchable ? (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 font-bold text-xs shadow-sm transition-all animate-pulse">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-700 font-bold text-xs shadow-sm transition-all animate-curve-pulse">
               <Zap className="w-4 h-4 text-emerald-600 fill-current" />
-              <span>Keeper Match Condition Met!</span>
+              <span>⚡ Keeper Match Condition Met!</span>
             </div>
           ) : (
             <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-neutral-100 border border-neutral-200 text-neutral-600 font-semibold text-xs">
@@ -442,13 +438,13 @@ export default function InteractiveCurveSimulator() {
             {/* Buy Start Price Slider */}
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-[11px]">
-                <span className="text-neutral-600 font-medium">Buy Start P₀:</span>
+                <span className="text-neutral-600 font-medium">Buy Start P₀ (Bid):</span>
                 <span className="font-mono font-bold text-emerald-600">${buyStart}</span>
               </div>
               <input
                 type="range"
-                min="2800"
-                max="3600"
+                min="2200"
+                max="3000"
                 step="50"
                 value={buyStart}
                 onChange={(e) => setBuyStart(Number(e.target.value))}
@@ -460,12 +456,12 @@ export default function InteractiveCurveSimulator() {
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-neutral-600 font-medium">Buy Slope (s):</span>
-                <span className="font-mono font-bold text-emerald-600">{buySlope} /s</span>
+                <span className="font-mono font-bold text-emerald-600">+{buySlope} /s</span>
               </div>
               <input
                 type="range"
-                min="-2"
-                max="-0.1"
+                min="0.1"
+                max="2.5"
                 step="0.1"
                 value={buySlope}
                 onChange={(e) => setBuySlope(Number(e.target.value))}
@@ -476,13 +472,13 @@ export default function InteractiveCurveSimulator() {
             {/* Sell Start Price Slider */}
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-[11px]">
-                <span className="text-neutral-600 font-medium">Sell Start P₀:</span>
+                <span className="text-neutral-600 font-medium">Sell Start P₀ (Ask):</span>
                 <span className="font-mono font-bold text-blue-600">${sellStart}</span>
               </div>
               <input
                 type="range"
-                min="2400"
-                max="3000"
+                min="3000"
+                max="3800"
                 step="50"
                 value={sellStart}
                 onChange={(e) => setSellStart(Number(e.target.value))}
@@ -494,12 +490,12 @@ export default function InteractiveCurveSimulator() {
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-neutral-600 font-medium">Sell Slope (s):</span>
-                <span className="font-mono font-bold text-blue-600">+{sellSlope} /s</span>
+                <span className="font-mono font-bold text-blue-600">{sellSlope} /s</span>
               </div>
               <input
                 type="range"
-                min="0.1"
-                max="2"
+                min="-2.5"
+                max="-0.1"
                 step="0.1"
                 value={sellSlope}
                 onChange={(e) => setSellSlope(Number(e.target.value))}
@@ -559,7 +555,7 @@ export default function InteractiveCurveSimulator() {
               </div>
               <p className="text-neutral-600 leading-relaxed">
                 Alice wants to buy ETH. She starts her bid at <strong>${buyStart}</strong> with slope{' '}
-                <strong>{buySlope}/s</strong>. Her bid decreases over time toward market convergence.
+                <strong>+{buySlope}/s</strong>. Her bid increases over time to incentivize counterparty sellers.
               </p>
             </div>
 
@@ -573,7 +569,7 @@ export default function InteractiveCurveSimulator() {
               </div>
               <p className="text-neutral-600 leading-relaxed">
                 Bob wants to sell ETH. He starts his ask at <strong>${sellStart}</strong> with slope{' '}
-                <strong>+{sellSlope}/s</strong>. His asking price rises over time to meet incoming demand.
+                <strong>{sellSlope}/s</strong>. His asking price discounts over time to attract buyers.
               </p>
             </div>
 
@@ -586,7 +582,7 @@ export default function InteractiveCurveSimulator() {
                 </span>
               </div>
               <p className="text-neutral-600 leading-relaxed">
-                Keepers monitor the curves. At{' '}
+                Keepers scan for <code>BuyPrice(t) ≥ SellPrice(t)</code>. At{' '}
                 <strong>t = {crossingTime !== null ? `${crossingTime}s` : 'N/A'}</strong>, prices cross at{' '}
                 <strong>${crossingPrice?.toFixed(2) ?? '3,000.00'}</strong>. The keeper executes the atomic swap on-chain
                 and earns a <strong>+${keeperFee.toFixed(3)}</strong> bounty!
