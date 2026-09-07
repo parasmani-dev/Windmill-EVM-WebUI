@@ -116,7 +116,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           {hovered === idx && (
             <div className="absolute inset-0 h-full w-full rounded-full bg-neutral-100/70 dark:bg-white/10 z-0 animate-fade-in pointer-events-none" />
           )}
-          <span className="relative z-10 uppercase tracking-wider text-[11.5px] xl:text-[12.5px] font-bold whitespace-nowrap">{item.name}</span>
+          <span className="relative z-10 uppercase tracking-wider text-xs xl:text-sm font-bold whitespace-nowrap">{item.name}</span>
         </Link>
       ))}
     </div>

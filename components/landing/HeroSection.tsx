@@ -343,88 +343,98 @@ export default function HeroSection() {
           rotateY: panelRotateY,
           transformPerspective: 1200,
         }}
-        className="relative w-[94%] sm:w-[90%] lg:w-[85%] max-w-[1340px] min-h-[86vh] lg:min-h-[820px] p-4 sm:p-6 md:p-8 flex flex-col justify-between"
+        className="relative w-[94%] sm:w-[90%] lg:w-[85%] max-w-[1340px] min-h-[86vh] lg:min-h-[820px] px-4 sm:px-6 md:px-8 pb-4 sm:pb-6 md:pb-8 pt-0 flex flex-col justify-between"
       >
         {/* ── REAL TRANSPARENT NOTCHED CARD SHAPE ── */}
-        {/* 1. Main Lower Card Body (from top-[42px] down to bottom) */}
-        <div className="absolute inset-x-0 top-[42px] bottom-0 rounded-b-[44px] sm:rounded-b-[50px] bg-gradient-to-b from-[#FFFDFB] via-[#FFF9F6] to-[#FFF3ED] border-x border-b border-white/90 shadow-[0_32px_95px_rgba(225,95,65,0.22),0_6px_20px_rgba(0,0,0,0.03)] pointer-events-none" />
+        {/* 1. Main Lower Card Body (from top-[54px] down to bottom) */}
+        <div className="absolute inset-x-0 top-[54px] bottom-0 rounded-b-[44px] sm:rounded-b-[50px] bg-gradient-to-b from-[#FFFDFB] via-[#FFF9F6] to-[#FFF3ED] border-x border-b border-white/90 shadow-[0_32px_95px_rgba(225,95,65,0.22),0_6px_20px_rgba(0,0,0,0.03)] pointer-events-none" />
 
-        {/* 2. Top-Left Shoulder (Flat top, rounded-tl, ends before notch) */}
-        <div className="absolute top-0 left-0 right-[calc(50%+115px)] sm:right-[calc(50%+130px)] md:right-[calc(50%+145px)] h-[43px] rounded-tl-[44px] sm:rounded-tl-[50px] bg-[#FFFDFB] border-t border-l border-white/90 pointer-events-none" />
+        {/* 2. Top-Left Shoulder (Flat top, rounded-tl, ends at notch curve start) */}
+        <div className="absolute top-0 left-0 right-[calc(50%+150px)] h-[54px] rounded-tl-[44px] sm:rounded-tl-[50px] bg-[#FFFDFB] border-t border-l border-white/90 pointer-events-none" />
 
-        {/* 3. Top-Right Shoulder (Flat top, rounded-tr, starts after notch) */}
-        <div className="absolute top-0 right-0 left-[calc(50%+115px)] sm:left-[calc(50%+130px)] md:left-[calc(50%+145px)] h-[43px] rounded-tr-[44px] sm:rounded-tr-[50px] bg-[#FFFDFB] border-t border-r border-white/90 pointer-events-none" />
+        {/* 3. Top-Right Shoulder (Flat top, rounded-tr, starts after notch curve ends) */}
+        <div className="absolute top-0 right-0 left-[calc(50%+150px)] h-[54px] rounded-tr-[44px] sm:rounded-tr-[50px] bg-[#FFFDFB] border-t border-r border-white/90 pointer-events-none" />
 
-        {/* 4. Left Fillet (Smooth white curve dipping into notch) */}
-        <div className="absolute top-0 right-[calc(50%+90px)] sm:right-[calc(50%+102px)] md:right-[calc(50%+115px)] w-[26px] sm:w-[30px] h-[43px] pointer-events-none">
-          <svg viewBox="0 0 30 43" fill="none" className="w-full h-full">
-            <path d="M 0 0 C 15 0, 18 43, 30 43 L 0 43 Z" fill="#FFFDFB" />
-            <path d="M 0 0 C 15 0, 18 43, 30 43" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" fill="none" />
+        {/* 4. Left Fillet (Smooth S-curve dipping into notch) */}
+        <div
+          style={{ left: 'calc(50% - 150px)', width: '42px', height: '54px' }}
+          className="absolute top-0 pointer-events-none"
+        >
+          <svg viewBox="0 0 42 54" fill="none" className="w-full h-full">
+            <path d="M 0 0 C 18 0, 24 54, 42 54 L 0 54 Z" fill="#FFFDFB" />
+            <path d="M 0 0 C 18 0, 24 54, 42 54" stroke="rgba(255,255,255,0.95)" strokeWidth="1.5" fill="none" />
           </svg>
         </div>
 
-        {/* 5. Right Fillet (Smooth white curve rising out of notch) */}
-        <div className="absolute top-0 left-[calc(50%+90px)] sm:left-[calc(50%+102px)] md:left-[calc(50%+115px)] w-[26px] sm:w-[30px] h-[43px] pointer-events-none">
-          <svg viewBox="0 0 30 43" fill="none" className="w-full h-full">
-            <path d="M 30 0 C 15 0, 12 43, 0 43 L 30 43 Z" fill="#FFFDFB" />
-            <path d="M 30 0 C 15 0, 12 43, 0 43" stroke="rgba(255,255,255,0.9)" strokeWidth="1.5" fill="none" />
+        {/* 5. Right Fillet (Smooth S-curve rising out of notch) */}
+        <div
+          style={{ left: 'calc(50% + 108px)', width: '42px', height: '54px' }}
+          className="absolute top-0 pointer-events-none"
+        >
+          <svg viewBox="0 0 42 54" fill="none" className="w-full h-full">
+            <path d="M 0 54 C 18 54, 24 0, 42 0 L 42 54 Z" fill="#FFFDFB" />
+            <path d="M 0 54 C 18 54, 24 0, 42 0" stroke="rgba(255,255,255,0.95)" strokeWidth="1.5" fill="none" />
           </svg>
         </div>
 
-        {/* 6. Notch Floor Border (Horizontal line across bottom of notch) */}
-        <div className="absolute top-[42px] left-[calc(50%-90px)] sm:left-[calc(50%-102px)] md:left-[calc(50%-115px)] right-[calc(50%-90px)] sm:right-[calc(50%-102px)] md:right-[calc(50%-115px)] h-[1px] bg-white/90 pointer-events-none" />
+        {/* 6. Notch Floor Border (Horizontal highlight across bottom of notch) */}
+        <div className="absolute top-[54px] left-[calc(50%-108px)] right-[calc(50%-108px)] h-[1.5px] bg-white/90 pointer-events-none" />
 
         {/* Soft top gradient sheen */}
-        <div className="absolute top-[42px] inset-x-0 h-32 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-b-[30px]" />
+        <div className="absolute top-[54px] inset-x-0 h-32 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-b-[30px]" />
 
-        {/* ── NOTCHED NAVBAR (PROPORTIONAL FONTS & TRANSPARENT NOTCH) ── */}
-        <header className="relative z-30 w-full pt-0.5 sm:pt-1 flex items-center justify-between">
-          {/* Left: Infinity Logo & Nav Links */}
-          <div className="flex items-center gap-5 sm:gap-7">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#1A110F] flex items-center justify-center text-white shadow-md cursor-pointer hover:scale-105 transition-transform">
-              <span className="text-lg sm:text-xl font-black leading-none font-mono">∞</span>
-            </div>
-
-            <nav className="hidden sm:flex items-center gap-6 text-[13px] sm:text-[14px] font-bold text-[#453633] tracking-tight">
-              <a href="#product" className="hover:text-[#F0553F] transition-colors">Product</a>
-              <a href="#contact" className="hover:text-[#F0553F] transition-colors">Contact</a>
-            </nav>
-          </div>
-
-          {/* Center: Creator / Collector Toggle Seated in 100% Transparent Notch */}
-          <div className="absolute top-1 sm:top-1.5 left-1/2 -translate-x-1/2 z-30 flex items-center gap-1 pointer-events-auto">
+        {/* ── CENTER: CREATOR / COLLECTOR TOGGLE SEATED FULLY INSIDE NOTCH ── */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[216px] h-[54px] flex items-center justify-center z-30 pointer-events-auto">
+          <div className="flex items-center gap-1">
             <button
+              type="button"
               onClick={() => setActiveTab('Creator')}
-              className={`px-5 sm:px-6 py-1.5 sm:py-2 rounded-full text-[12px] sm:text-[13px] font-black transition-all duration-300 cursor-pointer ${
+              className={`px-5 sm:px-6 py-1.5 rounded-full text-[12.5px] sm:text-[13px] font-black transition-all duration-200 cursor-pointer ${
                 activeTab === 'Creator'
-                  ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_4px_14px_rgba(217,69,47,0.45)]'
+                  ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_3px_12px_rgba(217,69,47,0.4)]'
                   : 'text-[#7A4B3F] hover:text-[#1A110F]'
               }`}
             >
               Creator
             </button>
             <button
+              type="button"
               onClick={() => setActiveTab('Collector')}
-              className={`px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[12px] sm:text-[13px] font-bold transition-all duration-300 cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-1.5 rounded-full text-[12.5px] sm:text-[13px] font-bold transition-all duration-200 cursor-pointer ${
                 activeTab === 'Collector'
-                  ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_4px_14px_rgba(217,69,47,0.45)]'
+                  ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_3px_12px_rgba(217,69,47,0.4)]'
                   : 'text-[#7A4B3F] hover:text-[#1A110F]'
               }`}
             >
               Collector
             </button>
           </div>
+        </div>
+
+        {/* ── NOTCHED NAVBAR HEADER (Left & Right Items aligned with Notch) ── */}
+        <header className="relative z-20 w-full h-[54px] flex items-center justify-between pointer-events-none">
+          {/* Left: Infinity Logo & Nav Links */}
+          <div className="flex items-center gap-5 sm:gap-7 pointer-events-auto">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#1A110F] flex items-center justify-center text-white shadow-md cursor-pointer hover:scale-105 transition-transform">
+              <span className="text-lg sm:text-xl font-black leading-none font-mono">∞</span>
+            </div>
+
+            <nav className="hidden sm:flex items-center gap-6 text-[14px] sm:text-[15px] font-bold text-[#3D2E2B] tracking-tight">
+              <a href="#product" className="hover:text-[#F0553F] transition-colors">Product</a>
+              <a href="#contact" className="hover:text-[#F0553F] transition-colors">Contact</a>
+            </nav>
+          </div>
 
           {/* Right: Help, Shop, Notification Bell & Avatar */}
-          <div className="flex items-center gap-3.5 sm:gap-5">
-            <a href="#help" className="hidden md:inline-block text-[13px] sm:text-[14px] font-bold text-[#453633] hover:text-[#F0553F] transition-colors tracking-tight">
+          <div className="flex items-center gap-3.5 sm:gap-5 pointer-events-auto">
+            <a href="#help" className="hidden md:inline-block text-[14px] sm:text-[15px] font-bold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
               Help
             </a>
-            <a href="#shop" className="hidden md:inline-block text-[13px] sm:text-[14px] font-bold text-[#453633] hover:text-[#F0553F] transition-colors tracking-tight">
+            <a href="#shop" className="hidden md:inline-block text-[14px] sm:text-[15px] font-bold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
               Shop
             </a>
 
-            <button className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1A110F] flex items-center justify-center text-white shadow-xs hover:scale-105 transition-all cursor-pointer">
+            <button type="button" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1A110F] flex items-center justify-center text-white shadow-xs hover:scale-105 transition-all cursor-pointer">
               <Bell className="w-4 h-4 fill-white text-white" />
             </button>
 
@@ -437,7 +447,7 @@ export default function HeroSection() {
         </header>
 
         {/* ── EDITORIAL CENTRAL HEADLINE ── */}
-        <div className="relative z-20 text-center pt-5 sm:pt-7 md:pt-9 pb-2">
+        <div className="relative z-20 text-center pt-8 sm:pt-10 md:pt-12 pb-2">
           <motion.h1
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
