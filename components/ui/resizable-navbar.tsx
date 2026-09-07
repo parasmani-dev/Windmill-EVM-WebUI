@@ -95,7 +95,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        'hidden w-fit min-w-0 flex-none flex-row items-center justify-center gap-1 xl:gap-3 text-xs xl:text-sm font-semibold text-neutral-700 dark:text-neutral-300 transition duration-200 xl:flex',
+        'hidden w-fit min-w-0 flex-none flex-row items-center justify-center gap-1 xl:gap-3 text-sm xl:text-[15px] font-semibold text-neutral-700 dark:text-neutral-300 transition duration-200 xl:flex',
         className
       )}
     >
@@ -105,7 +105,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           onClick={onItemClick}
           aria-current={item.active ? 'page' : undefined}
           className={cn(
-            'relative min-w-max shrink-0 rounded-full px-1 py-1.5 transition-colors duration-200 xl:px-2 xl:py-2 select-none',
+            'relative min-w-max shrink-0 rounded-full px-1.5 py-1.5 transition-colors duration-200 xl:px-2.5 xl:py-2 select-none',
             item.active
               ? 'bg-neutral-100/80 text-black dark:bg-white/10 dark:text-white font-bold'
               : 'text-neutral-700 hover:text-black dark:text-neutral-300 dark:hover:text-white'
@@ -116,7 +116,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           {hovered === idx && (
             <div className="absolute inset-0 h-full w-full rounded-full bg-neutral-100/70 dark:bg-white/10 z-0 animate-fade-in pointer-events-none" />
           )}
-          <span className="relative z-10 uppercase tracking-wider text-xs xl:text-sm font-bold whitespace-nowrap">{item.name}</span>
+          <span className="relative z-10 uppercase tracking-wider text-sm xl:text-[15px] font-bold whitespace-nowrap">{item.name}</span>
         </Link>
       ))}
     </div>

@@ -105,7 +105,7 @@ export default function Navbar() {
               <NavbarButton
                 onClick={() => setWalletModalOpen(true)}
                 variant="dark"
-                className="rounded-full !px-5 !py-2 text-xs font-bold text-white bg-black hover:bg-neutral-800 transition-all duration-300 border-none shadow-sm"
+                className="rounded-full !px-5 !py-2 text-xs xl:text-sm font-bold text-white bg-black hover:bg-neutral-800 transition-all duration-300 border-none shadow-sm"
               >
                 Connect Wallet
               </NavbarButton>

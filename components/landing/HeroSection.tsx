@@ -23,28 +23,28 @@ import ThreeIphoneCanvas from '@/components/ui/ThreeIphoneCanvas';
 /* ── Left Card: Bee Champion (Golden Yellow) ─────────────────── */
 function CardBeeChampion() {
   return (
-    <div className="w-[195px] sm:w-[220px] md:w-[235px] rounded-[26px] bg-[#FFF8E6] border border-[#FFE7B0] p-4 shadow-[0_20px_45px_rgba(235,160,20,0.18)] select-none transition-all duration-300 hover:scale-[1.03]">
+    <div className="w-[205px] sm:w-[230px] md:w-[245px] rounded-[26px] bg-[#FFF8E6] border border-[#FFE7B0] p-4 shadow-[0_20px_45px_rgba(235,160,20,0.18)] select-none transition-all duration-300 hover:scale-[1.03]">
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5">
-          <div className="w-5 h-5 rounded-full bg-[#FFA000] flex items-center justify-center text-[9px] text-white font-black">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-full bg-[#FFA000] flex items-center justify-center text-[11px] text-white font-black">
             👑
           </div>
-          <span className="text-[10px] font-black text-[#261B05]">Bee Champion</span>
+          <span className="text-[12.5px] font-black text-[#261B05]">Bee Champion</span>
         </div>
-        <span className="text-[8px] font-bold text-[#8C6300]">#01</span>
+        <span className="text-[10px] font-bold text-[#8C6300] bg-[#FFEBB8] px-2 py-0.5 rounded-full">#01</span>
       </div>
 
       {/* Character Canvas */}
       <div className="w-full aspect-[4/3.2] rounded-xl bg-gradient-to-br from-[#FFE894] via-[#FFD65C] to-[#FFAE1A] p-2 flex flex-col items-center justify-center relative shadow-inner overflow-hidden border border-white/40">
         <div className="text-3xl drop-shadow-md">🐝</div>
-        <div className="mt-1 px-2.5 py-0.5 rounded-full bg-white/80 text-[7.5px] font-extrabold text-[#5C3F00] shadow-2xs">
+        <div className="mt-1 px-3 py-0.5 rounded-full bg-white/85 text-[9px] font-extrabold text-[#5C3F00] shadow-2xs">
           Golden Series
         </div>
       </div>
 
-      <div className="mt-2.5 flex items-center justify-between text-[8px] text-[#6E5014]">
-        <span>Top Bid</span>
-        <span className="font-black text-[#261B05] font-mono text-[9.5px]">1.85 ETH</span>
+      <div className="mt-2.5 flex items-center justify-between text-[10.5px] text-[#6E5014]">
+        <span className="font-semibold">Top Bid</span>
+        <span className="font-black text-[#261B05] font-mono text-[12px]">1.85 ETH</span>
       </div>
     </div>
   );
@@ -53,21 +53,21 @@ function CardBeeChampion() {
 /* ── Foreground Left Card: Stardust Archive (Overlapping Phone) ─ */
 function CardStardustArchive() {
   return (
-    <div className="w-[230px] sm:w-[260px] md:w-[280px] rounded-[32px] bg-[#FFFBF9] border border-[#FFE6DE] p-4.5 shadow-[0_26px_60px_rgba(242,90,69,0.22)] select-none transition-all duration-300 hover:scale-[1.03]">
+    <div className="w-[240px] sm:w-[270px] md:w-[290px] rounded-[32px] bg-[#FFFBF9] border border-[#FFE6DE] p-5 shadow-[0_26px_60px_rgba(242,90,69,0.22)] select-none transition-all duration-300 hover:scale-[1.03]">
       {/* Card Header with Status Dots */}
-      <div className="flex items-center justify-between mb-2.5">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-[#2B1F1C] flex items-center justify-center text-[9px] text-white font-bold">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-6 h-6 rounded-full bg-[#2B1F1C] flex items-center justify-center text-[11px] text-white font-bold">
             ✦
           </div>
           <div>
-            <div className="text-[12px] font-black text-[#140F0E] leading-none">Stardust Archive</div>
-            <div className="text-[8.5px] font-bold text-[#8C7E7A] mt-0.5">844 items active</div>
+            <div className="text-[14px] font-black text-[#140F0E] leading-none">Stardust Archive</div>
+            <div className="text-[10.5px] font-bold text-[#8C7E7A] mt-1">844 items active</div>
           </div>
         </div>
-        <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
-          <span className="text-[8px] font-mono font-bold text-[#10B981]">LIVE</span>
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-[#10B981] animate-pulse" />
+          <span className="text-[10px] font-mono font-bold text-[#10B981]">LIVE</span>
         </div>
       </div>
 
@@ -76,11 +76,11 @@ function CardStardustArchive() {
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(255,210,60,0.35),transparent_70%)]" />
 
         {/* Top Floating Glass Badges */}
-        <div className="absolute top-2 left-2.5 flex items-center gap-1.5 z-20">
-          <div className="px-2 py-0.5 rounded-full bg-white/15 backdrop-blur-md text-[7px] font-bold text-white/90 border border-white/20">
+        <div className="absolute top-2.5 left-3 flex items-center gap-2 z-20">
+          <div className="px-2.5 py-0.5 rounded-full bg-white/15 backdrop-blur-md text-[8.5px] font-bold text-white/90 border border-white/20">
             Tier 1
           </div>
-          <div className="px-2 py-0.5 rounded-full bg-[#F25A45]/30 backdrop-blur-md text-[7px] font-bold text-[#FFAAA0] border border-[#F25A45]/40">
+          <div className="px-2.5 py-0.5 rounded-full bg-[#F25A45]/30 backdrop-blur-md text-[8.5px] font-bold text-[#FFAAA0] border border-[#F25A45]/40">
             CryptoNFT
           </div>
         </div>
@@ -114,19 +114,19 @@ function CardStardustArchive() {
         </div>
 
         {/* Bottom Trading Floating Status Pill */}
-        <div className="absolute bottom-2 inset-x-3 bg-white/10 backdrop-blur-md rounded-xl py-1 px-2.5 flex items-center justify-between border border-white/15 z-20">
-          <span className="text-[8px] font-mono text-white/80">VOL: 42.8 ETH</span>
-          <span className="text-[8px] font-mono font-black text-[#34D399]">+14.2%</span>
+        <div className="absolute bottom-2.5 inset-x-3 bg-white/10 backdrop-blur-md rounded-xl py-1 px-3 flex items-center justify-between border border-white/15 z-20">
+          <span className="text-[9.5px] font-mono text-white/90">VOL: 42.8 ETH</span>
+          <span className="text-[9.5px] font-mono font-black text-[#34D399]">+14.2%</span>
         </div>
       </div>
 
       {/* Action Bar */}
-      <div className="mt-3 flex items-center justify-between pt-0.5">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[9px] font-bold uppercase tracking-wider text-[#9E8E8A]">Floor</span>
-          <span className="text-[12.5px] font-black text-[#F25A45] font-mono">0.60 ETH</span>
+      <div className="mt-3.5 flex items-center justify-between pt-0.5">
+        <div className="flex items-center gap-2">
+          <span className="text-[10.5px] font-bold uppercase tracking-wider text-[#9E8E8A]">Floor</span>
+          <span className="text-[14px] font-black text-[#F25A45] font-mono">0.60 ETH</span>
         </div>
-        <button className="px-4 py-1.5 rounded-full bg-[#140F0E] text-white text-[9.5px] font-black hover:bg-[#F25A45] transition-colors cursor-pointer shadow-sm">
+        <button className="px-4 py-1.5 rounded-full bg-[#140F0E] text-white text-[11px] font-black hover:bg-[#F25A45] transition-colors cursor-pointer shadow-sm">
           Trade Now
         </button>
       </div>
@@ -137,28 +137,28 @@ function CardStardustArchive() {
 /* ── Center Right Card: Panda Explorer ───────────────────────── */
 function CardPandaExplorer() {
   return (
-    <div className="w-[220px] sm:w-[250px] md:w-[265px] rounded-[32px] bg-[#FFFBF9] border border-[#FFE6DE] p-4.5 shadow-[0_24px_55px_rgba(242,90,69,0.18)] select-none transition-all duration-300 hover:scale-[1.03]">
-      <div className="flex items-center justify-between mb-2.5">
-        <div className="flex items-center gap-2">
-          <div className="w-5 h-5 rounded-full bg-gradient-to-br from-[#FF927F] to-[#F25A45] flex items-center justify-center text-[10px] text-white font-bold">
+    <div className="w-[230px] sm:w-[260px] md:w-[280px] rounded-[32px] bg-[#FFFBF9] border border-[#FFE6DE] p-5 shadow-[0_24px_55px_rgba(242,90,69,0.18)] select-none transition-all duration-300 hover:scale-[1.03]">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="w-6 h-6 rounded-full bg-gradient-to-br from-[#FF927F] to-[#F25A45] flex items-center justify-center text-[12px] text-white font-bold">
             🤖
           </div>
           <div>
-            <div className="text-[12px] font-black text-[#140F0E] leading-none">Panda Explorer</div>
-            <div className="text-[8.5px] font-bold text-[#8C7E7A] mt-0.5">250 Series • Verified</div>
+            <div className="text-[14px] font-black text-[#140F0E] leading-none">Panda Explorer</div>
+            <div className="text-[10.5px] font-bold text-[#8C7E7A] mt-1">250 Series • Verified</div>
           </div>
         </div>
-        <Compass className="w-4 h-4 text-[#F25A45]" />
+        <Compass className="w-4.5 h-4.5 text-[#F25A45]" />
       </div>
 
       {/* 3D Robot Mascot on Warm Desert Terrain */}
       <div className="relative w-full aspect-[4/3.2] rounded-2xl bg-gradient-to-b from-[#FAF1ED] via-[#EFE0D8] to-[#DEC6BC] p-3 flex flex-col items-center justify-center relative shadow-inner border border-white/60 overflow-hidden">
         {/* Top Badges */}
-        <div className="absolute top-2 left-2.5 flex items-center gap-1 z-20">
-          <div className="w-4 h-4 rounded-full bg-white/70 backdrop-blur-xs flex items-center justify-center text-[7px] font-black text-[#6B534C] border border-white">
+        <div className="absolute top-2.5 left-3 flex items-center gap-1.5 z-20">
+          <div className="w-5 h-5 rounded-full bg-white/75 backdrop-blur-xs flex items-center justify-center text-[9px] font-black text-[#6B534C] border border-white">
             ⬡
           </div>
-          <div className="w-4 h-4 rounded-full bg-white/70 backdrop-blur-xs flex items-center justify-center text-[7px] font-black text-[#6B534C] border border-white">
+          <div className="w-5 h-5 rounded-full bg-white/75 backdrop-blur-xs flex items-center justify-center text-[9px] font-black text-[#6B534C] border border-white">
             ✓
           </div>
         </div>
@@ -197,18 +197,18 @@ function CardPandaExplorer() {
         <div className="w-24 h-3 rounded-full bg-[#BAA399]/40 blur-xs -mt-1" />
       </div>
 
-      <div className="mt-3 flex items-center justify-between">
-        <div className="flex items-center gap-1.5">
+      <div className="mt-3.5 flex items-center justify-between">
+        <div className="flex items-center gap-2">
           <div className="flex -space-x-1.5">
-            <div className="w-5 h-5 rounded-full bg-[#FF7A66] border-2 border-white flex items-center justify-center text-[7.5px] text-white font-bold">1</div>
-            <div className="w-5 h-5 rounded-full bg-[#FFA000] border-2 border-white flex items-center justify-center text-[7.5px] text-white font-bold">2</div>
-            <div className="w-5 h-5 rounded-full bg-[#3B2925] border-2 border-white flex items-center justify-center text-[7.5px] text-white font-bold">3</div>
+            <div className="w-5 h-5 rounded-full bg-[#FF7A66] border-2 border-white flex items-center justify-center text-[8.5px] text-white font-bold">1</div>
+            <div className="w-5 h-5 rounded-full bg-[#FFA000] border-2 border-white flex items-center justify-center text-[8.5px] text-white font-bold">2</div>
+            <div className="w-5 h-5 rounded-full bg-[#3B2925] border-2 border-white flex items-center justify-center text-[8.5px] text-white font-bold">3</div>
           </div>
-          <span className="text-[8.5px] font-mono text-[#8C7E7A]">offers</span>
+          <span className="text-[10.5px] font-mono text-[#8C7E7A]">offers</span>
         </div>
-        <div className="flex items-center gap-1">
-          <span className="text-[9px] font-bold text-[#8C7E7A] uppercase">Floor</span>
-          <span className="text-[12px] font-black text-[#F25A45] font-mono">0.45 ETH</span>
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10.5px] font-bold text-[#8C7E7A] uppercase">Floor</span>
+          <span className="text-[14px] font-black text-[#F25A45] font-mono">0.45 ETH</span>
         </div>
       </div>
     </div>
@@ -218,24 +218,24 @@ function CardPandaExplorer() {
 /* ── Far Right Card: Koala / Secondary Explorer ──────────────── */
 function CardKoalaExplorer() {
   return (
-    <div className="w-[195px] sm:w-[215px] md:w-[230px] rounded-[28px] bg-[#FFFBF9]/90 border border-[#FFE6DE] p-4 shadow-[0_20px_45px_rgba(242,90,69,0.14)] select-none transition-all duration-300 hover:scale-[1.03]">
+    <div className="w-[205px] sm:w-[225px] md:w-[240px] rounded-[28px] bg-[#FFFBF9]/90 border border-[#FFE6DE] p-4 shadow-[0_20px_45px_rgba(242,90,69,0.14)] select-none transition-all duration-300 hover:scale-[1.03]">
       <div className="flex items-center justify-between mb-2">
-        <div className="flex items-center gap-1.5">
-          <div className="w-5 h-5 rounded-full bg-[#8E9CA8] flex items-center justify-center text-[9px] text-white font-bold">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-full bg-[#8E9CA8] flex items-center justify-center text-[11px] text-white font-bold">
             🐨
           </div>
-          <span className="text-[10.5px] font-black text-[#140F0E]">Panda Explorer II</span>
+          <span className="text-[12.5px] font-black text-[#140F0E]">Panda Explorer II</span>
         </div>
-        <span className="text-[8px] font-bold text-[#8C7E7A]">Rare</span>
+        <span className="text-[10px] font-bold text-[#8C7E7A] bg-[#F4EDE8] px-2 py-0.5 rounded-full">Rare</span>
       </div>
 
       <div className="w-full aspect-[4/3] rounded-2xl bg-gradient-to-b from-[#E7EEF3] to-[#CFDAE2] flex items-center justify-center shadow-inner border border-white/50">
         <div className="text-3xl drop-shadow-md">🤖</div>
       </div>
 
-      <div className="mt-2.5 flex items-center justify-between text-[9px]">
-        <span className="text-[#8C7E7A]">Current</span>
-        <span className="font-black text-[#140F0E] font-mono text-[10px]">0.82 ETH</span>
+      <div className="mt-2.5 flex items-center justify-between text-[10.5px]">
+        <span className="text-[#8C7E7A] font-semibold">Current</span>
+        <span className="font-black text-[#140F0E] font-mono text-[12px]">0.82 ETH</span>
       </div>
     </div>
   );
@@ -384,12 +384,12 @@ export default function HeroSection() {
         <div className="absolute top-[54px] inset-x-0 h-32 bg-gradient-to-b from-white/70 to-transparent pointer-events-none rounded-b-[30px]" />
 
         {/* ── CENTER: CREATOR / COLLECTOR TOGGLE SEATED FULLY INSIDE NOTCH ── */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[216px] h-[54px] flex items-center justify-center z-30 pointer-events-auto">
-          <div className="flex items-center gap-1">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[226px] h-[54px] flex items-center justify-center z-30 pointer-events-auto">
+          <div className="flex items-center gap-1.5">
             <button
               type="button"
               onClick={() => setActiveTab('Creator')}
-              className={`px-5 sm:px-6 py-1.5 rounded-full text-[12.5px] sm:text-[13px] font-black transition-all duration-200 cursor-pointer ${
+              className={`px-6 py-2 rounded-full text-[13.5px] sm:text-[14px] font-black transition-all duration-200 cursor-pointer ${
                 activeTab === 'Creator'
                   ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_3px_12px_rgba(217,69,47,0.4)]'
                   : 'text-[#7A4B3F] hover:text-[#1A110F]'
@@ -400,7 +400,7 @@ export default function HeroSection() {
             <button
               type="button"
               onClick={() => setActiveTab('Collector')}
-              className={`px-3.5 sm:px-4 py-1.5 rounded-full text-[12.5px] sm:text-[13px] font-bold transition-all duration-200 cursor-pointer ${
+              className={`px-4 py-2 rounded-full text-[13.5px] sm:text-[14px] font-bold transition-all duration-200 cursor-pointer ${
                 activeTab === 'Collector'
                   ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_3px_12px_rgba(217,69,47,0.4)]'
                   : 'text-[#7A4B3F] hover:text-[#1A110F]'
@@ -414,32 +414,32 @@ export default function HeroSection() {
         {/* ── NOTCHED NAVBAR HEADER (Left & Right Items aligned with Notch) ── */}
         <header className="relative z-20 w-full h-[54px] flex items-center justify-between pointer-events-none">
           {/* Left: Infinity Logo & Nav Links */}
-          <div className="flex items-center gap-5 sm:gap-7 pointer-events-auto">
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-2xl bg-[#1A110F] flex items-center justify-center text-white shadow-md cursor-pointer hover:scale-105 transition-transform">
-              <span className="text-lg sm:text-xl font-black leading-none font-mono">∞</span>
+          <div className="flex items-center gap-6 sm:gap-8 pointer-events-auto">
+            <div className="w-10 h-10 rounded-2xl bg-[#1A110F] flex items-center justify-center text-white shadow-md cursor-pointer hover:scale-105 transition-transform">
+              <span className="text-xl sm:text-2xl font-black leading-none font-mono">∞</span>
             </div>
 
-            <nav className="hidden sm:flex items-center gap-6 text-[14px] sm:text-[15px] font-bold text-[#3D2E2B] tracking-tight">
+            <nav className="hidden sm:flex items-center gap-7 text-[15px] sm:text-[16px] font-extrabold text-[#3D2E2B] tracking-tight">
               <a href="#product" className="hover:text-[#F0553F] transition-colors">Product</a>
               <a href="#contact" className="hover:text-[#F0553F] transition-colors">Contact</a>
             </nav>
           </div>
 
           {/* Right: Help, Shop, Notification Bell & Avatar */}
-          <div className="flex items-center gap-3.5 sm:gap-5 pointer-events-auto">
-            <a href="#help" className="hidden md:inline-block text-[14px] sm:text-[15px] font-bold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
+          <div className="flex items-center gap-4 sm:gap-6 pointer-events-auto">
+            <a href="#help" className="hidden md:inline-block text-[15px] sm:text-[16px] font-extrabold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
               Help
             </a>
-            <a href="#shop" className="hidden md:inline-block text-[14px] sm:text-[15px] font-bold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
+            <a href="#shop" className="hidden md:inline-block text-[15px] sm:text-[16px] font-extrabold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
               Shop
             </a>
 
-            <button type="button" className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-[#1A110F] flex items-center justify-center text-white shadow-xs hover:scale-105 transition-all cursor-pointer">
-              <Bell className="w-4 h-4 fill-white text-white" />
+            <button type="button" className="w-10 h-10 rounded-full bg-[#1A110F] flex items-center justify-center text-white shadow-xs hover:scale-105 transition-all cursor-pointer">
+              <Bell className="w-4.5 h-4.5 fill-white text-white" />
             </button>
 
-            <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gradient-to-tr from-[#FF7A66] to-[#FFA07A] p-[2px] cursor-pointer shadow-xs hover:scale-105 transition-transform">
-              <div className="w-full h-full rounded-full bg-[#2F211F] flex items-center justify-center text-sm text-white font-bold">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#FF7A66] to-[#FFA07A] p-[2px] cursor-pointer shadow-xs hover:scale-105 transition-transform">
+              <div className="w-full h-full rounded-full bg-[#2F211F] flex items-center justify-center text-base text-white font-bold">
                 🧑‍🚀
               </div>
             </div>
@@ -452,7 +452,7 @@ export default function HeroSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-black tracking-tight text-[#140F0E] leading-[1.04] max-w-4xl mx-auto uppercase"
+            className="font-sans text-4xl sm:text-5xl md:text-6xl lg:text-[66px] font-black tracking-tight text-[#140F0E] leading-[1.03] max-w-4xl mx-auto uppercase"
           >
             LET&apos;S DISCOVER &<br />
             GATHER{' '}
@@ -492,10 +492,10 @@ export default function HeroSection() {
           <motion.div
             animate={{ y: [-3, 3, -3] }}
             transition={{ repeat: Infinity, duration: 4.8, ease: 'easeInOut' }}
-            className="absolute left-2 sm:left-6 md:left-10 bottom-3 sm:bottom-4 md:bottom-5 z-25 hidden md:flex items-center gap-1.5 select-none bg-white/95 px-4.5 py-2.5 rounded-2xl border border-[#FFE7DF] shadow-md backdrop-blur-xs"
+            className="absolute left-2 sm:left-6 md:left-10 bottom-3 sm:bottom-4 md:bottom-5 z-25 hidden md:flex items-center gap-2 select-none bg-white/95 px-5 py-3 rounded-2xl border border-[#FFE7DF] shadow-md backdrop-blur-xs"
           >
-            <span className="text-3xl sm:text-4xl font-black text-[#140F0E] leading-none tracking-tighter">5</span>
-            <div className="w-6.5 h-6.5 rounded-full bg-[#F0553F] flex items-center justify-center text-white text-xs shadow-[0_2px_8px_rgba(240,85,63,0.5)]">
+            <span className="text-4xl sm:text-5xl font-black text-[#140F0E] leading-none tracking-tighter">5</span>
+            <div className="w-7 h-7 rounded-full bg-[#F0553F] flex items-center justify-center text-white text-sm shadow-[0_2px_8px_rgba(240,85,63,0.5)]">
               ★
             </div>
           </motion.div>
