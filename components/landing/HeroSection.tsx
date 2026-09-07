@@ -278,7 +278,11 @@ function CircularMapRadar() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MAIN HERO SECTION COMPONENT
+   MAIN HERO SECTION COMPONENT (SCREENSHOT RECONSTRUCTION)
+   - Background: Rich 2-color peach/coral blend framing the card
+   - 3D Main Card: 85% width, floating ceramic card with 3D shadow & rounded corners
+   - Notched Navbar: Scooped center notch with Creator/Collector toggle, nav links, bell & avatar
+   - Small Components: Bee Champion, Dashed Outline, Stardust Archive, 5★, Panda Explorer, Koala & Radar Map
    ═══════════════════════════════════════════════════════════════ */
 
 export default function HeroSection() {
@@ -293,8 +297,8 @@ export default function HeroSection() {
   const smoothX = useSpring(mouseX, springConfig);
   const smoothY = useSpring(mouseY, springConfig);
 
-  const panelRotateX = useTransform(smoothY, [-0.5, 0.5], [1, -1]);
-  const panelRotateY = useTransform(smoothX, [-0.5, 0.5], [-1.5, 1.5]);
+  const panelRotateX = useTransform(smoothY, [-0.5, 0.5], [0.8, -0.8]);
+  const panelRotateY = useTransform(smoothX, [-0.5, 0.5], [-1.2, 1.2]);
 
   const cardLeftX = useTransform(smoothX, [-0.5, 0.5], [-8, 8]);
   const cardLeftY = useTransform(smoothY, [-0.5, 0.5], [-6, 6]);
@@ -322,83 +326,114 @@ export default function HeroSection() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       id="home"
-      className="relative min-h-screen w-full flex items-center justify-center px-3 sm:px-6 md:px-8 py-12 lg:py-14 overflow-hidden select-none"
+      className="relative min-h-screen w-full flex items-center justify-center py-6 sm:py-8 md:py-10 lg:py-12 px-3 sm:px-6 overflow-hidden select-none"
       style={{
-        backgroundColor: '#FFE9E1',
-        backgroundImage: `
-          radial-gradient(circle at 50% 16%, #FFF4EE 0%, transparent 65%),
-          radial-gradient(circle at 85% 85%, #FFD6C9 0%, transparent 55%),
-          radial-gradient(circle at 15% 75%, #FFDFD4 0%, transparent 55%)
-        `,
+        background: 'linear-gradient(135deg, #FFA088 0%, #FFB29D 35%, #FED5C7 100%)',
       }}
     >
-      {/* Studio Ambient Glows */}
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[75vw] h-[60vh] rounded-full bg-white/45 blur-[110px] pointer-events-none" />
-      <div className="absolute bottom-12 right-1/4 w-[40vw] h-[35vh] rounded-full bg-[#FF7A66]/18 blur-[95px] pointer-events-none" />
+      {/* Studio Ambient Glows for Background Depth */}
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[55vh] rounded-full bg-white/35 blur-[110px] pointer-events-none" />
+      <div className="absolute bottom-8 right-12 w-[35vw] h-[35vh] rounded-full bg-[#FF7055]/25 blur-[95px] pointer-events-none" />
+      <div className="absolute top-12 left-10 w-[30vw] h-[30vh] rounded-full bg-[#FFA088]/30 blur-[85px] pointer-events-none" />
 
-      {/* ── MAIN LARGE CREAM/WHITE FLOATING BOARD (88-92vw) ── */}
+      {/* ── 3D MAIN CARD (EXACT 85% SIZE FLOATING IN CENTER) ── */}
       <motion.div
         style={{
           rotateX: panelRotateX,
           rotateY: panelRotateY,
           transformPerspective: 1200,
         }}
-        className="relative w-full max-w-[1480px] min-h-[85vh] lg:h-[87vh] rounded-[36px] sm:rounded-[44px] bg-gradient-to-b from-[#FFFDFC] via-[#FFF9F6] to-[#FFF5F1] border border-white/90 shadow-[0_32px_95px_rgba(235,115,90,0.18),0_4px_20px_rgba(0,0,0,0.02)] p-5 sm:p-7 md:p-9 flex flex-col justify-between overflow-hidden"
+        className="relative w-[94%] sm:w-[90%] lg:w-[85%] max-w-[1340px] min-h-[86vh] lg:min-h-[820px] rounded-[44px] sm:rounded-[50px] bg-gradient-to-b from-[#FFFDFB] via-[#FFF9F6] to-[#FFF3ED] border border-white/90 shadow-[0_32px_95px_rgba(225,95,65,0.22),0_6px_20px_rgba(0,0,0,0.03)] p-4 sm:p-6 md:p-8 flex flex-col justify-between overflow-hidden"
       >
-        <div className="absolute top-0 inset-x-0 h-40 bg-gradient-to-b from-white/90 to-transparent pointer-events-none" />
+        {/* Soft top gradient sheen */}
+        <div className="absolute top-0 inset-x-0 h-36 bg-gradient-to-b from-white/90 to-transparent pointer-events-none" />
 
-        {/* ── TOP NAVIGATION ── */}
-        <header className="relative z-30 flex items-center justify-between w-full">
+        {/* ── AUTHENTIC NOTCHED NAVBAR ── */}
+        <header className="relative z-30 w-full pt-1 sm:pt-2 flex items-center justify-between">
           {/* Left: Infinity Logo & Nav Links */}
           <div className="flex items-center gap-6 sm:gap-8">
-            <div className="w-10 h-10 rounded-2xl bg-[#1A1412] flex items-center justify-center text-white shadow-md cursor-pointer hover:scale-105 transition-transform">
+            <div className="w-10 h-10 rounded-2xl bg-[#1A110F] flex items-center justify-center text-white shadow-md cursor-pointer hover:scale-105 transition-transform">
               <span className="text-xl font-black leading-none font-mono">∞</span>
             </div>
 
-            <nav className="hidden sm:flex items-center gap-8 text-[15px] sm:text-[16px] font-extrabold text-[#473B38] tracking-tight">
-              <a href="#product" className="hover:text-[#F25A45] transition-colors">Product</a>
-              <a href="#contact" className="hover:text-[#F25A45] transition-colors">Contact</a>
+            <nav className="hidden sm:flex items-center gap-7 text-[15px] sm:text-[16px] font-extrabold text-[#3D2E2B] tracking-tight">
+              <a href="#product" className="hover:text-[#F0553F] transition-colors">Product</a>
+              <a href="#contact" className="hover:text-[#F0553F] transition-colors">Contact</a>
             </nav>
           </div>
 
-          {/* Center: Top Pill Notch with Creator/Collector Toggle */}
-          <div className="flex items-center bg-[#F5E6E0] p-1.5 rounded-full border border-[#E8D4CD] shadow-inner">
-            <button
-              onClick={() => setActiveTab('Creator')}
-              className={`px-6 py-2 rounded-full text-[13.5px] font-black transition-all duration-300 cursor-pointer ${
-                activeTab === 'Creator'
-                  ? 'bg-[#F25A45] text-white shadow-[0_3px_10px_rgba(242,90,69,0.4)]'
-                  : 'text-[#6E605C] hover:text-[#1A1412]'
-              }`}
-            >
-              Creator
-            </button>
-            <button
-              onClick={() => setActiveTab('Collector')}
-              className={`px-6 py-2 rounded-full text-[13.5px] font-black transition-all duration-300 cursor-pointer ${
-                activeTab === 'Collector'
-                  ? 'bg-[#F25A45] text-white shadow-[0_3px_10px_rgba(242,90,69,0.4)]'
-                  : 'text-[#6E605C] hover:text-[#1A1412]'
-              }`}
-            >
-              Collector
-            </button>
+          {/* Center: Scooped Notch Cutout with Creator / Collector Toggle */}
+          <div className="absolute -top-4 sm:-top-6 md:-top-8 left-1/2 -translate-x-1/2 flex flex-col items-center pointer-events-auto">
+            {/* SVG Scooped Notch shape matching reference screenshot */}
+            <div className="relative flex items-center justify-center">
+              <svg
+                width="320"
+                height="54"
+                viewBox="0 0 320 54"
+                fill="none"
+                className="w-[270px] sm:w-[310px] md:w-[330px] h-[46px] sm:h-[50px] md:h-[54px] drop-shadow-[0_2px_4px_rgba(0,0,0,0.02)]"
+              >
+                <defs>
+                  <linearGradient id="notchBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="#FFA088" />
+                    <stop offset="40%" stopColor="#FFB29D" />
+                    <stop offset="100%" stopColor="#FED5C7" />
+                  </linearGradient>
+                </defs>
+                {/* Scooped concave cutout */}
+                <path
+                  d="M 0 0 C 35 0, 48 44, 82 44 L 238 44 C 272 44, 285 0, 320 0 Z"
+                  fill="url(#notchBgGrad)"
+                />
+                {/* Curved highlight line */}
+                <path
+                  d="M 0 0 C 35 0, 48 44, 82 44 L 238 44 C 272 44, 285 0, 320 0"
+                  stroke="rgba(255, 255, 255, 0.85)"
+                  strokeWidth="1.5"
+                  fill="none"
+                />
+              </svg>
+
+              {/* Creator / Collector Pill Toggle seated directly inside the notch */}
+              <div className="absolute top-2.5 sm:top-3 md:top-3.5 flex items-center gap-1">
+                <button
+                  onClick={() => setActiveTab('Creator')}
+                  className={`px-5 sm:px-6 py-1.5 sm:py-2 rounded-full text-[12px] sm:text-[13.5px] font-black transition-all duration-300 cursor-pointer ${
+                    activeTab === 'Creator'
+                      ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_4px_14px_rgba(217,69,47,0.45)]'
+                      : 'text-[#7A4B3F] hover:text-[#1A110F]'
+                  }`}
+                >
+                  Creator
+                </button>
+                <button
+                  onClick={() => setActiveTab('Collector')}
+                  className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full text-[12px] sm:text-[13.5px] font-black transition-all duration-300 cursor-pointer ${
+                    activeTab === 'Collector'
+                      ? 'bg-gradient-to-r from-[#D9452F] to-[#EE5740] text-white shadow-[0_4px_14px_rgba(217,69,47,0.45)]'
+                      : 'text-[#7A4B3F] hover:text-[#1A110F]'
+                  }`}
+                >
+                  Collector
+                </button>
+              </div>
+            </div>
           </div>
 
           {/* Right: Help, Shop, Notification Bell & Avatar */}
-          <div className="flex items-center gap-5 sm:gap-6">
-            <a href="#help" className="hidden md:inline-block text-[15px] sm:text-[16px] font-extrabold text-[#473B38] hover:text-[#F25A45] transition-colors tracking-tight">
+          <div className="flex items-center gap-4 sm:gap-6">
+            <a href="#help" className="hidden md:inline-block text-[15px] sm:text-[16px] font-extrabold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
               Help
             </a>
-            <a href="#shop" className="hidden md:inline-block text-[15px] sm:text-[16px] font-extrabold text-[#473B38] hover:text-[#F25A45] transition-colors tracking-tight">
+            <a href="#shop" className="hidden md:inline-block text-[15px] sm:text-[16px] font-extrabold text-[#3D2E2B] hover:text-[#F0553F] transition-colors tracking-tight">
               Shop
             </a>
 
-            <button className="w-10 h-10 rounded-full bg-white border border-[#E8D4CD] flex items-center justify-center text-[#544845] hover:text-[#F25A45] shadow-2xs cursor-pointer transition-colors">
-              <Bell className="w-4.5 h-4.5" />
+            <button className="w-10 h-10 rounded-full bg-[#1A110F] flex items-center justify-center text-white shadow-xs hover:scale-105 transition-all cursor-pointer">
+              <Bell className="w-4 h-4 fill-white text-white" />
             </button>
 
-            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#FF7A66] to-[#FFA07A] p-[2px] cursor-pointer shadow-xs">
+            <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-[#FF7A66] to-[#FFA07A] p-[2px] cursor-pointer shadow-xs hover:scale-105 transition-transform">
               <div className="w-full h-full rounded-full bg-[#2F211F] flex items-center justify-center text-sm text-white font-bold">
                 🧑‍🚀
               </div>
@@ -407,80 +442,80 @@ export default function HeroSection() {
         </header>
 
         {/* ── EDITORIAL CENTRAL HEADLINE ── */}
-        <div className="relative z-20 text-center pt-2 sm:pt-4 md:pt-6 pb-2">
+        <div className="relative z-20 text-center pt-5 sm:pt-7 md:pt-9 pb-2">
           <motion.h1
-            initial={{ opacity: 0, y: 18 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-[62px] font-black tracking-tight text-[#140F0E] leading-[1.04] max-w-4xl mx-auto uppercase"
+            className="font-sans text-3xl sm:text-4xl md:text-5xl lg:text-[60px] font-black tracking-tight text-[#140F0E] leading-[1.04] max-w-4xl mx-auto uppercase"
           >
             LET&apos;S DISCOVER &<br />
             GATHER{' '}
-            <span className="text-[#F25A45] drop-shadow-[0_4px_16px_rgba(242,90,69,0.25)]">
+            <span className="text-[#F0553F] drop-shadow-[0_4px_16px_rgba(240,85,63,0.25)]">
               UNIQUE NFTs
             </span>
           </motion.h1>
         </div>
 
-        {/* ── 3D PHYSICAL SHOWCASE STAGE (PERFECT DITTO FIT) ── */}
-        <div className="relative w-full h-[400px] sm:h-[440px] md:h-[480px] lg:h-[510px] flex items-end justify-center mt-auto">
+        {/* ── 3D PHYSICAL SHOWCASE STAGE (SMALL COMPONENTS SURROUNDING IPHONE) ── */}
+        <div className="relative w-full h-[410px] sm:h-[450px] md:h-[490px] lg:h-[520px] flex items-end justify-center mt-auto">
 
-          {/* 1. Dashed Placeholder Outline Card (Left background - elevated) */}
-          <div className="absolute left-6 sm:left-14 md:left-24 lg:left-34 top-0 w-[145px] sm:w-[165px] aspect-[4/5] rounded-[26px] border-2 border-dashed border-[#F0D5CC] opacity-65 pointer-events-none hidden sm:block" />
+          {/* 1. Dashed Placeholder Outline Card (Left background) */}
+          <div className="absolute left-6 sm:left-14 md:left-24 lg:left-34 top-2 w-[145px] sm:w-[160px] aspect-[4/5] rounded-[26px] border-2 border-dashed border-[#F0D5CC] opacity-65 pointer-events-none hidden sm:block" />
 
-          {/* 2. Far Left Card: Bee Champion (Elevated upward) */}
+          {/* 2. Far Left Card: Bee Champion (Tilted yellow card) */}
           <motion.div
             style={{ x: cardLeftX, y: cardLeftY }}
             animate={{ y: [-4, 5, -4], rotate: [-8, -6, -8] }}
             transition={{ repeat: Infinity, duration: 6, ease: 'easeInOut' }}
-            className="absolute -left-2 sm:left-2 md:left-6 lg:left-14 bottom-24 sm:bottom-28 md:bottom-32 z-20 hidden sm:block pointer-events-auto"
+            className="absolute -left-2 sm:left-2 md:left-6 lg:left-12 bottom-24 sm:bottom-28 md:bottom-32 z-20 hidden sm:block pointer-events-auto"
           >
             <CardBeeChampion />
           </motion.div>
 
-          {/* 3. Foreground Left Card: Stardust Archive (Elevated upward overlapping phone) */}
+          {/* 3. Foreground Left Card: Stardust Archive (Overlapping Phone) */}
           <motion.div
             style={{ x: cardLeftX, y: cardLeftY }}
             animate={{ y: [5, -6, 5], rotate: [4, 6, 4] }}
             transition={{ repeat: Infinity, duration: 5.4, ease: 'easeInOut', delay: 0.4 }}
-            className="absolute left-2 sm:left-14 md:left-28 lg:left-42 bottom-10 sm:bottom-12 md:bottom-14 z-35 pointer-events-auto"
+            className="absolute left-2 sm:left-12 md:left-22 lg:left-36 bottom-8 sm:bottom-10 md:bottom-12 z-35 pointer-events-auto"
           >
             <CardStardustArchive />
           </motion.div>
 
-          {/* 4. Bold '5' Rating Badge with Solid Orange Star */}
+          {/* 4. Bold '5' Rating Badge with Solid Coral Star (Bottom-Left) */}
           <motion.div
             animate={{ y: [-3, 3, -3] }}
             transition={{ repeat: Infinity, duration: 4.8, ease: 'easeInOut' }}
-            className="absolute left-2 sm:left-6 md:left-12 bottom-4 sm:bottom-5 md:bottom-6 z-20 hidden md:flex items-center gap-1.5 select-none bg-white/95 px-4.5 py-2.5 rounded-2xl border border-[#FFE7DF] shadow-md backdrop-blur-xs"
+            className="absolute left-2 sm:left-6 md:left-10 bottom-3 sm:bottom-4 md:bottom-5 z-25 hidden md:flex items-center gap-1.5 select-none bg-white/95 px-4.5 py-2.5 rounded-2xl border border-[#FFE7DF] shadow-md backdrop-blur-xs"
           >
             <span className="text-3xl sm:text-4xl font-black text-[#140F0E] leading-none tracking-tighter">5</span>
-            <div className="w-6.5 h-6.5 rounded-full bg-[#F25A45] flex items-center justify-center text-white text-xs shadow-[0_2px_8px_rgba(242,90,69,0.5)]">
+            <div className="w-6.5 h-6.5 rounded-full bg-[#F0553F] flex items-center justify-center text-white text-xs shadow-[0_2px_8px_rgba(240,85,63,0.5)]">
               ★
             </div>
           </motion.div>
 
-          {/* ── 5. CENTRAL AUTHENTIC 3D iPHONE PRO (THREE.JS MESH) ── */}
+          {/* ── 5. CENTRAL AUTHENTIC 3D iPHONE PRO (THREE.JS REALTIME MESH) ── */}
           <div className="relative z-25 transform translate-y-1 pointer-events-auto flex flex-col items-center">
             <ThreeIphoneCanvas />
           </div>
 
-          {/* 6. Upper Right Card: Panda Explorer (Elevated upward for symmetry) */}
+          {/* 6. Upper Right Card: Panda Explorer (Tilted beige robot card) */}
           <motion.div
             style={{ x: cardRightX, y: cardRightY }}
             animate={{ y: [-4, 5, -4], rotate: [7, 9, 7] }}
             transition={{ repeat: Infinity, duration: 5.8, ease: 'easeInOut', delay: 0.3 }}
-            className="absolute right-2 sm:right-14 md:right-28 lg:right-42 bottom-20 sm:bottom-24 md:bottom-26 z-20 pointer-events-auto"
+            className="absolute right-2 sm:right-12 md:right-22 lg:right-36 bottom-20 sm:bottom-24 md:bottom-26 z-20 pointer-events-auto"
           >
             <CardPandaExplorer />
           </motion.div>
 
-          {/* 7. Far Right Peripheral Card: Koala Explorer (Elevated upward) */}
+          {/* 7. Far Right Peripheral Card: Koala Explorer */}
           <motion.div
             style={{ x: cardRightX, y: cardRightY }}
             animate={{ y: [4, -5, 4], rotate: [-6, -4, -6] }}
             transition={{ repeat: Infinity, duration: 6.4, ease: 'easeInOut', delay: 0.7 }}
-            className="absolute -right-2 sm:right-2 md:right-6 lg:right-14 bottom-10 sm:bottom-12 md:bottom-14 z-15 hidden lg:block opacity-95 pointer-events-auto"
+            className="absolute -right-2 sm:right-2 md:right-6 lg:right-12 bottom-10 sm:bottom-12 md:bottom-14 z-15 hidden lg:block opacity-95 pointer-events-auto"
           >
             <CardKoalaExplorer />
           </motion.div>
@@ -489,7 +524,7 @@ export default function HeroSection() {
           <motion.div
             animate={{ y: [-3, 4, -3] }}
             transition={{ repeat: Infinity, duration: 5.2, ease: 'easeInOut', delay: 0.5 }}
-            className="absolute right-20 sm:right-32 md:right-48 bottom-3 sm:bottom-4 z-15 hidden sm:block pointer-events-auto"
+            className="absolute right-18 sm:right-28 md:right-42 bottom-3 sm:bottom-4 z-15 hidden sm:block pointer-events-auto"
           >
             <CircularMapRadar />
           </motion.div>
@@ -499,3 +534,4 @@ export default function HeroSection() {
     </section>
   );
 }
+
