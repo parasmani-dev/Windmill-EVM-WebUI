@@ -326,7 +326,7 @@ export default function HeroSection() {
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
       id="home"
-      className="relative min-h-screen w-full flex items-center justify-center py-6 sm:py-8 md:py-10 lg:py-12 px-3 sm:px-6 overflow-hidden select-none"
+      className="relative min-h-screen w-full flex items-center justify-center pt-28 sm:pt-32 md:pt-36 pb-8 sm:pb-12 px-3 sm:px-6 overflow-hidden select-none"
       style={{
         background: 'linear-gradient(135deg, #FFA088 0%, #FFB29D 35%, #FED5C7 100%)',
       }}

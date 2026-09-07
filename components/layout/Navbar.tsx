@@ -40,11 +40,6 @@ export default function Navbar() {
         : pathname === item.link || pathname?.startsWith(`${item.link}/`),
   }));
 
-  // On the landing page, the authentic notched navbar is integrated into the 85% 3D card
-  if (pathname === '/') {
-    return null;
-  }
-
   return (
     <div className="fixed top-6 left-0 right-0 z-50 flex justify-center w-full pointer-events-none">
       <BaseNavbar className="w-full max-w-7xl px-4 pointer-events-auto">
