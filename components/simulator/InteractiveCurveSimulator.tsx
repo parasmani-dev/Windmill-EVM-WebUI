@@ -81,8 +81,17 @@ export default function InteractiveCurveSimulator() {
         const deltaSec = (now - lastTimeRef.current) / 1000;
         setTime((prev) => {
           const next = prev + deltaSec * playbackSpeed;
+
+          // After match, curves stop moving further:
+          // Halt animation right at the crossing point when match condition is achieved
+          if (crossingTime !== null && prev < crossingTime && next >= crossingTime) {
+            setIsPlaying(false);
+            return crossingTime;
+          }
+
           if (next >= maxTime) {
-            return 0; // loop around smoothly
+            setIsPlaying(false);
+            return maxTime;
           }
           return next;
         });
@@ -95,7 +104,7 @@ export default function InteractiveCurveSimulator() {
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-  }, [isPlaying, playbackSpeed, maxTime]);
+  }, [isPlaying, playbackSpeed, maxTime, crossingTime]);
 
   // ── Price Computations ─────────────────────────────────────────────
   const currentBuyPrice = Math.max(100, Math.round((buyStart + buySlope * time) * 100) / 100);
@@ -132,10 +141,22 @@ export default function InteractiveCurveSimulator() {
     return `M ${points.join(' L ')}`;
   }, [sellStart, sellSlope]);
 
-  // Preset scenarios
-  const applyPreset = (preset: 'default' | 'fast' | 'volatile') => {
+  // Toggle play/pause (restarts from 0 if already settled at match point)
+  const togglePlay = () => {
+    if (!isPlaying) {
+      if (crossingTime !== null && time >= crossingTime) {
+        setTime(0);
+      }
+      setIsPlaying(true);
+    } else {
+      setIsPlaying(false);
+    }
+  };
+
+  // Preset scenarios demonstrating various slope configurations
+  const applyPreset = (preset: 'standard' | 'fast' | 'both-negative' | 'both-positive') => {
     setTime(0);
-    if (preset === 'default') {
+    if (preset === 'standard') {
       setBuyStart(2700);
       setBuySlope(0.8);
       setSellStart(3300);
@@ -145,11 +166,18 @@ export default function InteractiveCurveSimulator() {
       setBuySlope(1.5);
       setSellStart(3200);
       setSellSlope(-1.2);
-    } else if (preset === 'volatile') {
-      setBuyStart(2500);
-      setBuySlope(0.8);
-      setSellStart(3500);
-      setSellSlope(-1.8);
+    } else if (preset === 'both-negative') {
+      // Demonstrates Buy having a -ve slope while still converging and matching
+      setBuyStart(3100);
+      setBuySlope(-0.5);
+      setSellStart(3400);
+      setSellSlope(-1.5);
+    } else if (preset === 'both-positive') {
+      // Demonstrates Sell having a +ve slope while still converging and matching
+      setBuyStart(2600);
+      setBuySlope(1.8);
+      setSellStart(2900);
+      setSellSlope(0.8);
     }
     setIsPlaying(true);
   };
@@ -333,7 +361,7 @@ export default function InteractiveCurveSimulator() {
               {/* Play / Pause Toggle */}
               <button
                 type="button"
-                onClick={() => setIsPlaying(!isPlaying)}
+                onClick={togglePlay}
                 className="h-9 w-9 rounded-full bg-black text-white flex items-center justify-center hover:opacity-85 transition-opacity cursor-pointer shadow-xs"
                 title={isPlaying ? 'Pause Simulator' : 'Play Simulator'}
               >
@@ -444,7 +472,7 @@ export default function InteractiveCurveSimulator() {
               <input
                 type="range"
                 min="2200"
-                max="3000"
+                max="3800"
                 step="50"
                 value={buyStart}
                 onChange={(e) => setBuyStart(Number(e.target.value))}
@@ -452,16 +480,18 @@ export default function InteractiveCurveSimulator() {
               />
             </div>
 
-            {/* Buy Slope Slider */}
+            {/* Buy Slope Slider: supports both +ve and -ve slopes */}
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-neutral-600 font-medium">Buy Slope (s):</span>
-                <span className="font-mono font-bold text-emerald-600">+{buySlope} /s</span>
+                <span className="font-mono font-bold text-emerald-600">
+                  {buySlope > 0 ? `+${buySlope}` : buySlope} /s
+                </span>
               </div>
               <input
                 type="range"
-                min="0.1"
-                max="2.5"
+                min="-3.0"
+                max="3.0"
                 step="0.1"
                 value={buySlope}
                 onChange={(e) => setBuySlope(Number(e.target.value))}
@@ -477,7 +507,7 @@ export default function InteractiveCurveSimulator() {
               </div>
               <input
                 type="range"
-                min="3000"
+                min="2200"
                 max="3800"
                 step="50"
                 value={sellStart}
@@ -486,16 +516,18 @@ export default function InteractiveCurveSimulator() {
               />
             </div>
 
-            {/* Sell Slope Slider */}
+            {/* Sell Slope Slider: supports both +ve and -ve slopes */}
             <div className="flex flex-col gap-1">
               <div className="flex justify-between text-[11px]">
                 <span className="text-neutral-600 font-medium">Sell Slope (s):</span>
-                <span className="font-mono font-bold text-blue-600">{sellSlope} /s</span>
+                <span className="font-mono font-bold text-blue-600">
+                  {sellSlope > 0 ? `+${sellSlope}` : sellSlope} /s
+                </span>
               </div>
               <input
                 type="range"
-                min="-2.5"
-                max="-0.1"
+                min="-3.0"
+                max="3.0"
                 step="0.1"
                 value={sellSlope}
                 onChange={(e) => setSellSlope(Number(e.target.value))}
@@ -504,29 +536,38 @@ export default function InteractiveCurveSimulator() {
             </div>
 
             {/* Scenario Presets */}
-            <div className="pt-2 flex items-center justify-between gap-1.5 border-t border-black/5">
+            <div className="pt-2 flex flex-col gap-1.5 border-t border-black/5">
               <span className="text-[10px] text-neutral-400 font-semibold uppercase tracking-wider">Presets:</span>
-              <div className="flex gap-1">
+              <div className="grid grid-cols-2 gap-1.5">
                 <button
                   type="button"
-                  onClick={() => applyPreset('default')}
-                  className="px-2 py-0.5 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer"
+                  onClick={() => applyPreset('standard')}
+                  className="px-2 py-1 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer text-center"
                 >
                   Standard
                 </button>
                 <button
                   type="button"
                   onClick={() => applyPreset('fast')}
-                  className="px-2 py-0.5 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer"
+                  className="px-2 py-1 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer text-center"
                 >
                   Fast Match
                 </button>
                 <button
                   type="button"
-                  onClick={() => applyPreset('volatile')}
-                  className="px-2 py-0.5 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer"
+                  onClick={() => applyPreset('both-negative')}
+                  className="px-2 py-1 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer text-center"
+                  title="Both slopes negative: Buy -0.5/s, Sell -1.5/s"
                 >
-                  Wide Spread
+                  Both -ve Slopes
+                </button>
+                <button
+                  type="button"
+                  onClick={() => applyPreset('both-positive')}
+                  className="px-2 py-1 rounded text-[9.5px] font-bold bg-neutral-100 text-neutral-700 hover:bg-neutral-200 cursor-pointer text-center"
+                  title="Both slopes positive: Buy +1.8/s, Sell +0.8/s"
+                >
+                  Both +ve Slopes
                 </button>
               </div>
             </div>
@@ -554,8 +595,9 @@ export default function InteractiveCurveSimulator() {
                 </span>
               </div>
               <p className="text-neutral-600 leading-relaxed">
-                Alice wants to buy ETH. She starts her bid at <strong>${buyStart}</strong> with slope{' '}
-                <strong>+{buySlope}/s</strong>. Her bid increases over time to incentivize counterparty sellers.
+                Alice wants to buy ETH. She can set a positive or negative slope. Here, her bid starts at{' '}
+                <strong>${buyStart}</strong> with slope{' '}
+                <strong>{buySlope > 0 ? `+${buySlope}` : buySlope}/s</strong>.
               </p>
             </div>
 
@@ -568,8 +610,9 @@ export default function InteractiveCurveSimulator() {
                 </span>
               </div>
               <p className="text-neutral-600 leading-relaxed">
-                Bob wants to sell ETH. He starts his ask at <strong>${sellStart}</strong> with slope{' '}
-                <strong>{sellSlope}/s</strong>. His asking price discounts over time to attract buyers.
+                Bob wants to sell ETH. He can also configure a positive or negative slope. Here, his ask starts at{' '}
+                <strong>${sellStart}</strong> with slope{' '}
+                <strong>{sellSlope > 0 ? `+${sellSlope}` : sellSlope}/s</strong>.
               </p>
             </div>
 
@@ -585,7 +628,7 @@ export default function InteractiveCurveSimulator() {
                 Keepers scan for <code>BuyPrice(t) ≥ SellPrice(t)</code>. At{' '}
                 <strong>t = {crossingTime !== null ? `${crossingTime}s` : 'N/A'}</strong>, prices cross at{' '}
                 <strong>${crossingPrice?.toFixed(2) ?? '3,000.00'}</strong>. The keeper executes the atomic swap on-chain
-                and earns a <strong>+${keeperFee.toFixed(3)}</strong> bounty!
+                (+${keeperFee.toFixed(3)} bounty) and <strong>the curves stop moving once settled</strong>.
               </p>
             </div>
           </div>
