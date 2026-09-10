@@ -20,18 +20,24 @@ interface ContractCallResult {
 export function useContract() {
   const { fullAddress, chainId, provider, isConnected } = useWallet();
 
-  // If wallet is connected, use wallet's chainId; otherwise fall back to DEFAULT_CHAIN_ID
-  const effectiveChainId = chainId || DEFAULT_CHAIN_ID;
+  // If wallet is connected, use wallet's chainId;
+  // Otherwise find the first configured chain with a contract address, or fall back to DEFAULT_CHAIN_ID
+  const configuredChainId = useMemo(() => {
+    if (chainId) return chainId;
+    if (SUPPORTED_CHAINS[DEFAULT_CHAIN_ID]?.contractAddress) return DEFAULT_CHAIN_ID;
+    const deployed = Object.values(SUPPORTED_CHAINS).find((c) => !!c.contractAddress);
+    return deployed ? deployed.chainId : DEFAULT_CHAIN_ID;
+  }, [chainId]);
 
   const contractAddress = useMemo(() => {
-    if (!effectiveChainId) return null;
-    return SUPPORTED_CHAINS[effectiveChainId]?.contractAddress || null;
-  }, [effectiveChainId]);
+    if (!configuredChainId) return null;
+    return SUPPORTED_CHAINS[configuredChainId]?.contractAddress || null;
+  }, [configuredChainId]);
 
   const rpcUrl = useMemo(() => {
-    if (!effectiveChainId) return null;
-    return SUPPORTED_CHAINS[effectiveChainId]?.rpcUrl || null;
-  }, [effectiveChainId]);
+    if (!configuredChainId) return null;
+    return SUPPORTED_CHAINS[configuredChainId]?.rpcUrl || null;
+  }, [configuredChainId]);
 
   // ── Read contract (via RPC or provider) ───────────────────────────
   const readContract = useCallback(
