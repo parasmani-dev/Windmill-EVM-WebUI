@@ -96,9 +96,9 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-6">
-            <Link href="/kya" className="text-xs text-neutral-500 hover:text-cyan-400 transition-colors flex items-center gap-1">
+            <Link href="/terms-of-use" className="text-xs text-neutral-500 hover:text-cyan-400 transition-colors flex items-center gap-1">
               <span className="inline-block w-1.5 h-1.5 rounded-full bg-cyan-500"></span>
-              KYA (Assumptions)
+              Terms of Use
             </Link>
             <Link href="/privacy" className="text-xs text-neutral-500 hover:text-neutral-300 transition-colors">
               Privacy Policy

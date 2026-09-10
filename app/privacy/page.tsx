@@ -59,8 +59,8 @@ export default function PrivacyPage() {
           <Link href="/terms" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors">
             &larr; Terms of Service
           </Link>
-          <Link href="/kya" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors">
-            Know Your Assumptions (KYA) &rarr;
+          <Link href="/terms-of-use" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors">
+            Terms of Use &rarr;
           </Link>
         </div>
       </div>

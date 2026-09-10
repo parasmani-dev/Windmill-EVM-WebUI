@@ -73,8 +73,8 @@ export default function TermsPage() {
 
         {/* Footer Navigation */}
         <div className="pt-8 border-t border-neutral-200 dark:border-neutral-800 flex justify-between items-center text-sm">
-          <Link href="/kya" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors">
-            &larr; Know Your Assumptions (KYA)
+          <Link href="/terms-of-use" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors">
+            &larr; Terms of Use
           </Link>
           <Link href="/privacy" className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-500 dark:hover:text-cyan-300 transition-colors">
             Privacy Policy &rarr;
